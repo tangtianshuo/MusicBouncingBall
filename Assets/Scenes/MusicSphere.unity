@@ -135,6 +135,8 @@ GameObject:
   - component: {fileID: 475500071}
   - component: {fileID: 475500070}
   - component: {fileID: 475500073}
+  - component: {fileID: 475500074}
+  - component: {fileID: 475500075}
   m_Layer: 0
   m_Name: Director
   m_TagString: Untagged
@@ -149,11 +151,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 475500069}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c13b5efd93a770341b9adfeb0847c090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventPointRecoder: {fileID: 0}
 --- !u!82 &475500071
 AudioSource:
   m_ObjectHideFlags: 0
@@ -277,6 +280,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 675a8024b92f84e4cb2441c6fe858641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  detector: {fileID: 0}
+--- !u!114 &475500074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475500069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698d7d79e2b7ef247aba0862c28e9ce2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 475500075}
+--- !u!114 &475500075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475500069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 3cdd6cc610b014341985bbf49b7a1389, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a0368025-4bf1-404f-8fdb-57ee634c59c9
+    m_ActionName: CreatePanel/LeftUp[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cfd61976-aba9-4940-a7c5-11e06b328322
+    m_ActionName: CreatePanel/UP[/Keyboard/w]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fe5bcfbd-fbe3-4429-ae4c-a61039c2809c
+    m_ActionName: CreatePanel/RightUP[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ba3198bb-30ee-475f-96af-6255d8405f25
+    m_ActionName: CreatePanel/Left[/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 86693a4c-a34c-48e2-b0b7-92b9f8d0b450
+    m_ActionName: CreatePanel/Right[/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e125ce21-713b-4cc3-8fa8-82b471e246b4
+    m_ActionName: CreatePanel/LeftDown[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0da512e6-3ab7-4755-ad15-13ac91a656ad
+    m_ActionName: CreatePanel/Down[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e5b0f10c-856c-49be-8c93-1957bd5ff612
+    m_ActionName: CreatePanel/RightDown[/Keyboard/c]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: CreatePanel
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 537028264}
 --- !u!1 &537028262
 GameObject:
   m_ObjectHideFlags: 0
