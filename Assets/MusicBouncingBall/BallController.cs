@@ -14,7 +14,6 @@ public class BallController : MonoBehaviour
 
     public float speed = 2;
 
-    private Transform nextTransform;
 
     [SerializeField]
     private Vector3 nextPosition;
@@ -30,36 +29,18 @@ public class BallController : MonoBehaviour
     // Start is called before the first frame update
     public bool stopSign;
 
-    // public IEnumerator BallMainMovement()
-    // {
-    //     var sign = stopSign;
-    //     while (sign)
-    //     {
-
-    //         yield return null;
-
-    //     }
-
-    // }
-
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         // 使用其他方式
         infos = GameObject.Find("Director").GetComponent<Director>().infoList.info;
-        // API.Ballistics.Solution(transform.position, speed, new Vector3(1, 1, 1), Physics.gravity);
-        // ballisticPathLineRender = GetComponent<BallisticPathLineRender>();
-        // rb.AddForce(new Vector3(10, 10, 0), ForceMode.Impulse);
     }
 
     void FixedUpdate()
     {
         nextPosition = transform.position + rb.velocity * Time.fixedDeltaTime;
-        // 获取运动方向，减去小球半径和板子二分之一
-        // Debug.Log(nextPosition);
-        // 模拟重力
-        // ballisticPathLineRender.start = transform.position;
+        // 实时获取小球运动状态
         V = rb.velocity;
 
     }
@@ -80,6 +61,7 @@ public class BallController : MonoBehaviour
 
         }
     }
+
     /// <summary>
     /// 根据重力和速度的值，获取timeOffset之后的世界坐标值
     /// </summary>
