@@ -3,25 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PanelController : MonoBehaviour
+public class PanelBehaviour : MonoBehaviour
 {
 
     PlayerInputHandler inputHandler;
     Director director;
     public GameObject bouncingBall;
     public bool isActivate;
-    private BallController ballController;
+    private BallBehaviour ballController;
     public Vector3 nextPosition;
 
     public Quaternion nextRotation;
 
     public Action simulateLineAction;
 
+    public float height;
+
     void Start()
     {
+        height = GetComponent<Collider>().bounds.size.y;
         isActivate = true;
         bouncingBall = GameObject.FindWithTag("BouncingBall");
-        ballController = bouncingBall.GetComponent<BallController>();
+        ballController = bouncingBall.GetComponent<BallBehaviour>();
         inputHandler = GameObject.Find("Director").GetComponent<PlayerInputHandler>();
         director = GameObject.Find("Director").GetComponent<Director>();
         inputHandler.rollAction += Roll;
@@ -69,7 +72,7 @@ public class PanelController : MonoBehaviour
     {
         var ball = other.gameObject;
         var rb = ball.GetComponent<Rigidbody>();
-        V = ball.GetComponent<BallController>().V;
+        V = ball.GetComponent<BallBehaviour>().V;
         // rb.Sleep();
         // var v = rb.velocity;
 

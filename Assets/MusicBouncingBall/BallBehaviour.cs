@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /*
@@ -9,11 +10,12 @@ using UnityEngine;
  */
 
 
-public class BallController : MonoBehaviour
+public class BallBehaviour : MonoBehaviour
 {
 
     public float speed = 2;
 
+    public float ballR;
 
     [SerializeField]
     private Vector3 nextPosition;
@@ -32,9 +34,10 @@ public class BallController : MonoBehaviour
 
     void Start()
     {
+        ballR = transform.GetComponent<SphereCollider>().bounds.size.y / 2;
         rb = GetComponent<Rigidbody>();
         // 使用其他方式
-        infos = GameObject.Find("Director").GetComponent<Director>().infoList.info;
+        infos = Director.Share.infoList.info;
     }
 
     void FixedUpdate()
@@ -88,5 +91,18 @@ public class BallController : MonoBehaviour
         // ballisticPathLineRender.projectile.velocity = velocity;
     }
 
+    public void Stop()
+    {
+        rb.Sleep();
+    }
+    public void StartMove()
+    {
+        rb.WakeUp();
+    }
+    public void StartMove(Vector3 v)
+    {
+        StartMove();
+        rb.velocity = v;
+    }
 
 }

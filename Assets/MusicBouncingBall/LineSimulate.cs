@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -24,6 +25,16 @@ public class LineSimulate : MonoBehaviour
 
     }
 
+    public void BallSimulate()
+    {
+
+    }
+
+    public void SaveSimulate()
+    {
+
+    }
+
     /// <summary>
     /// 使用LineRenderer 模拟小球运动轨迹
     /// </summary>
@@ -32,11 +43,17 @@ public class LineSimulate : MonoBehaviour
         // lineRenderer
         var list = CalculateTrajectoryPoints(initialVelocity, time, numPoints);
         Debug.Log("list" + list.Length);
-        foreach (var point in list)
+        var count = 0;
+        for (int i = 0; i < list.Length; i++)
         {
-            lineRenderer.positionCount++;
-            lineRenderer.SetPosition(lineRenderer.positionCount - 1, point);
+            lineRenderer.SetPosition(i, list[i]);
         }
+        // foreach (var point in list)
+        // {
+
+        //     lineRenderer.SetPosition(lineRenderer.positionCount - 51 + count, point);
+        //     count++;
+        // }
 
     }
     void FixedUpdate()

@@ -22,7 +22,9 @@ public class Director : MonoBehaviour
     public virtual void Awake()
     {
         Share = this;
+
     }
+    public PanelManager panelManager;
 
     public PlayerInputHandler inputHandler;
 
@@ -31,54 +33,55 @@ public class Director : MonoBehaviour
     public int speed;
     public InfoList infoList;
 
-    public Transform ball;
-
     private float ballR;
 
     private float panelH;
 
     private float grivate;
 
+    public Transform ball;
+
     private GameObject panel;
+
+    private BallBehaviour ballBehaviour;
+    private PanelBehaviour panelBehaviour;
+
+    /// <summary>
+    ///  小球半径和跳板的高度和
+    /// </summary>
+    private float offset;
 
 
     void Start()
     {
+        ballBehaviour = ball.GetComponent<BallBehaviour>();
+        offset = ballBehaviour.ballR + PanelManager.Share.panelH;
+        grivate = Physics.gravity.y;
         isConfirm = false;
         speed = 5;
-        ballR = ball.GetComponent<SphereCollider>().bounds.size.y / 2;
-        Addressables.LoadAssetAsync<GameObject>("JumpPanel").Completed += (handle) =>
-         {
-             panel = handle.Result;
-             panelH = panel.GetComponent<Collider>().bounds.size.y;
 
-             grivate = Physics.gravity.y;
-             FileUtils fileUtils = new();
-             string content = fileUtils.ReadFile("first");
-             Debug.Log(content);
-             infoList = JsonUtility.FromJson<InfoList>(content);
-             confirmAction += Confrim;
-             inputHandler.confirm += Confirm;
-             StartCoroutine(MainCircle());
-         };
+        FileUtils fileUtils = new();
+        string content = fileUtils.ReadFile("first");
+        infoList = JsonUtility.FromJson<InfoList>(content);
+        confirmAction += Confrim;
+        inputHandler.confirm += Confirm;
+        StartCoroutine(MainCircle());
+
         // emitter = GameObject.FindWithTag("Emitter");
     }
 
-
-    // public IEnumerator MainCircle()
+    // /// <summary>
+    // /// 主进程循环
+    // /// </summary>
+    // void FixedUpdate()
     // {
-    //     if (infoList == null)
-    //     {
-    //         throw new Exception("infoList is null");
-    //     }
 
-    //     yield return null;
     // }
-
 
     #region  废案
     public IEnumerator MainCircle()
     {
+
         if (infoList == null)
         {
             throw new Exception("infoList is null");
@@ -88,28 +91,47 @@ public class Director : MonoBehaviour
         int count = 1;
         while (count < infos.Count)
         {
+            ballBehaviour.Stop();
+            yield return new WaitUntil(() => PanelManager.Share.panelList.Count > 0);
+            ballBehaviour.StartMove();
+            if (PanelManager.Share.panelList.Count < 0)
+            {
+                yield return null;
+            }
             Info info = infos[count];
             timeOffset = info.timeOffset;
+            var ballPosition = ballBehaviour.GetBallPosition(timeOffset);
 
-            // yield return StartCoroutine();
+            // 计算下一块板子的位置
+            var panelPosition = new Vector2(ballPosition.x, ballPosition.y);
+            var panelRotation = new Vector2();
+            var v = ballBehaviour.V;
+            // var angle = Vector3.Angle(panel.transform.up, v.normalized);
+            // panelRotation = new Vector2(angle, 90);
+            if (count == 1)
+            {
+                panelRotation = new Vector2(20, 90);
+            }
+            var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
+
             EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
-
-
-            float distance = timeOffset * speed;
-            // Vector3 position = new Vector3(0, UnityEngine.Random.Range(0, 2), 0);
-            Vector3 position = new Vector3(0, distance, 0);
-            // 小球移动事件
-            Vector3 offset = new Vector3(0, ballR + panelH, 0);
-
-
-            Vector3 panelPosition = new(position.x, distance, position.z);
-            // 生成跳板
             foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
             {
                 Debug.Log(item.name + "enable false");
-                item.GetComponent<PanelController>().DestoryController();
+                item.GetComponent<PanelBehaviour>().DestoryController();
             }
-            var currentPanel = Instantiate(panel, panelPosition, Quaternion.Euler(new Vector3(20, 90, 0)));
+
+            // float distance = timeOffset * speed;
+            // // Vector3 position = new Vector3(0, UnityEngine.Random.Range(0, 2), 0);
+            // Vector3 position = new Vector3(0, distance, 0);
+            // // 小球移动事件
+            // Vector3 offset = new Vector3(0, ballR + panelH, 0);
+
+
+            // Vector3 panelPosition = new(position.x, distance, position.z);
+            // // 生成跳板
+
+            // var currentPanel = Instantiate(panel, panelPosition, Quaternion.Euler(new Vector3(20, 90, 0)));
 
             // // Vector3.Reflect();
             // // 计算力的方向
@@ -131,7 +153,7 @@ public class Director : MonoBehaviour
             // 等待确认事件
 
             yield return new WaitUntil(() => isConfirm);
-            ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelController>().reflectV;
+            ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelBehaviour>().reflectV;
             // 进入下一次循环
             count++;
             isConfirm = false;
