@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using HeathenEngineering.PhysKit;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-using API = HeathenEngineering.PhysKit.API;
 /*
  * 作者: 唐天硕
  * 创建: 2024-05-27 22:05
@@ -35,7 +33,6 @@ public class Director : MonoBehaviour
 
     public Transform ball;
 
-    public TrickShot emitter;
     private float ballR;
 
     private float panelH;
@@ -100,7 +97,6 @@ public class Director : MonoBehaviour
 
             float distance = timeOffset * speed;
             // Vector3 position = new Vector3(0, UnityEngine.Random.Range(0, 2), 0);
-            distance = API.Maths.FallDistance(grivate, timeOffset);
             Vector3 position = new Vector3(0, distance, 0);
             // 小球移动事件
             Vector3 offset = new Vector3(0, ballR + panelH, 0);
