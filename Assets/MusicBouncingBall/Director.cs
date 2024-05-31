@@ -115,11 +115,11 @@ public class Director : MonoBehaviour
             var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
 
             EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
-            foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
-            {
-                Debug.Log(item.name + "enable false");
-                item.GetComponent<PanelBehaviour>().DestoryController();
-            }
+            // foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
+            // {
+            //     Debug.Log(item.name + "enable false");
+            //     item.GetComponent<PanelBehaviour>().DestoryController();
+            // }
 
             // float distance = timeOffset * speed;
             // // Vector3 position = new Vector3(0, UnityEngine.Random.Range(0, 2), 0);
@@ -153,7 +153,7 @@ public class Director : MonoBehaviour
             // 等待确认事件
 
             yield return new WaitUntil(() => isConfirm);
-            ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelBehaviour>().reflectV;
+            ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelBehaviour>().reflectV * 2f;
             // 进入下一次循环
             count++;
             isConfirm = false;

@@ -66,14 +66,14 @@ public class LineSimulate : MonoBehaviour
     /// 根据给定的速度，重力，时间，计算终点位置和过程的路径点集数组
     /// </summary>
     /// <param name="initialVelocity">初始速度</param>
-    /// 
     /// <param name="time">总时间</param>
+    /// <param name="numPoints">路径点的数量</param>
     /// <returns>路径点集数组</returns>
     public Vector3[] CalculateTrajectoryPoints(Vector3 initialVelocity, float time, int numPoints)
     {
-        if (numPoints == 0)
+        if (numPoints <= 0)
         {
-            numPoints = 50; // 路径点的数量
+            numPoints = 50; // 默认路径点的数量
         }
         Vector3[] points = new Vector3[numPoints];
         float deltaTime = time / numPoints; // 每个点之间的时间间隔
@@ -81,9 +81,10 @@ public class LineSimulate : MonoBehaviour
         for (int i = 0; i < numPoints; i++)
         {
             float t = deltaTime * i;
-            Vector3 position = transform.position + initialVelocity * t + 0.5f * Vector3.down * Physics.gravity.y * t * t;
+            Vector3 displacement = initialVelocity * t + 0.5f * Physics.gravity * t * t;
+            Vector3 position = transform.position + displacement;
             points[i] = position;
-            Debug.Log(position);
+            Debug.Log("Trajectory point " + i + ": " + position);
         }
 
         return points;

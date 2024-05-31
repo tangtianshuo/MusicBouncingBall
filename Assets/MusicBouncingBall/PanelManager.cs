@@ -31,9 +31,9 @@ public class PanelManager : MonoBehaviour
     }
 
 
-    void FixedUpdate()
+    void LateUpdate()
     {
-        if (Time.frameCount % 1000 == 0)
+        if (Time.frameCount % 100 == 0)
         {
             var count = 0;
 

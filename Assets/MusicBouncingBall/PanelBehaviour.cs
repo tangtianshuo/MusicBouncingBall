@@ -25,8 +25,8 @@ public class PanelBehaviour : MonoBehaviour
         isActivate = true;
         bouncingBall = GameObject.FindWithTag("BouncingBall");
         ballController = bouncingBall.GetComponent<BallBehaviour>();
-        inputHandler = GameObject.Find("Director").GetComponent<PlayerInputHandler>();
-        director = GameObject.Find("Director").GetComponent<Director>();
+        inputHandler = Director.Share.GetComponent<PlayerInputHandler>();
+        director = Director.Share.GetComponent<Director>();
         inputHandler.rollAction += Roll;
         confirm = false;
     }
@@ -53,6 +53,7 @@ public class PanelBehaviour : MonoBehaviour
             }
             reflectV = Vector3.Reflect(V, GetNomalizationVector3());
             EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+            Debug.Log(reflectV);
         }
 
     }
