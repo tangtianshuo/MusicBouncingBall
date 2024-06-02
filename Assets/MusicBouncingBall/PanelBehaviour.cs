@@ -64,11 +64,12 @@ public class PanelBehaviour : MonoBehaviour
     }
     void OnEnable()
     {
-        Debug.Log("JumpPanel OnEnable");
+        // Debug.Log("JumpPanel OnEnable");
         isActivate = false;
     }
     public Vector3 V;
     public Vector3 reflectV;
+
     public void OnCollisionEnter(Collision other)
     {
         var ball = other.gameObject;
@@ -78,8 +79,9 @@ public class PanelBehaviour : MonoBehaviour
         // var v = rb.velocity;
 
         // speed = V.magnitude;
-        Debug.Log(V);
+        Debug.Log("BallV::" + V);
         reflectV = Vector3.Reflect(V, GetNomalizationVector3());
+        Debug.Log("ReflectV::" + V);
         EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
 
     }

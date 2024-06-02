@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,6 +9,7 @@ public class LineSimulate : MonoBehaviour
 {
 
     public LineRenderer lineRenderer;
+    public LineRenderer confirmLineRenderer;
     public Transform ball;
 
     public int numPoints;
@@ -42,7 +44,7 @@ public class LineSimulate : MonoBehaviour
     {
         // lineRenderer
         var list = CalculateTrajectoryPoints(initialVelocity, time, numPoints);
-        Debug.Log("list" + list.Length);
+        // Debug.Log("list" + list.Length);
         var count = 0;
         for (int i = 0; i < list.Length; i++)
         {
@@ -84,10 +86,21 @@ public class LineSimulate : MonoBehaviour
             Vector3 displacement = initialVelocity * t + 0.5f * Physics.gravity * t * t;
             Vector3 position = transform.position + displacement;
             points[i] = position;
-            Debug.Log("Trajectory point " + i + ": " + position);
+            // Debug.Log("Trajectory point " + i + ": " + position);
         }
 
         return points;
     }
 
+    public void ConfirmLine(int count, List<Vector2> points)
+    {
+        confirmLineRenderer.positionCount += count;
+        var times = 0;
+        foreach (var point in points)
+        {
+
+            confirmLineRenderer.SetPosition(confirmLineRenderer.positionCount - count + times, point);
+            times++;
+        }
+    }
 }

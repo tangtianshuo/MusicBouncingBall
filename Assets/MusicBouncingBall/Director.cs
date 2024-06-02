@@ -65,7 +65,7 @@ public class Director : MonoBehaviour
         infoList = JsonUtility.FromJson<InfoList>(content);
         confirmAction += Confrim;
         inputHandler.confirm += Confirm;
-        StartCoroutine(MainCircle());
+        StartCoroutine(MainCircleDoTween());
 
         // emitter = GameObject.FindWithTag("Emitter");
     }
@@ -77,6 +77,28 @@ public class Director : MonoBehaviour
     // {
 
     // }
+
+    public IEnumerator MainCircleDoTween()
+    {
+        if (infoList == null)
+        {
+            throw new Exception("infoList is null");
+        }
+
+        List<Info> infos = infoList.info;
+        int count = 1;
+        while (count < infos.Count)
+        {
+            var timeOffset = infos[count].timeOffset;
+            var nextPosition = ballBehaviour.GetBallPosition(timeOffset);
+            Debug.Log(nextPosition);
+            yield return null;
+            count++;
+        }
+
+    }
+
+
 
     #region  废案
     public IEnumerator MainCircle()
@@ -104,7 +126,7 @@ public class Director : MonoBehaviour
 
             // 计算下一块板子的位置
             var panelPosition = new Vector2(ballPosition.x, ballPosition.y);
-            var panelRotation = new Vector2();
+            var panelRotation = new Vector2(0, 90);
             var v = ballBehaviour.V;
             // var angle = Vector3.Angle(panel.transform.up, v.normalized);
             // panelRotation = new Vector2(angle, 90);
@@ -115,6 +137,9 @@ public class Director : MonoBehaviour
             var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
 
             EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
+
+            // 在预测轨迹线的终点添加一个跳板
+
             // foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
             // {
             //     Debug.Log(item.name + "enable false");
@@ -153,7 +178,13 @@ public class Director : MonoBehaviour
             // 等待确认事件
 
             yield return new WaitUntil(() => isConfirm);
+
+
             ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelBehaviour>().reflectV * 2f;
+            // ball.GetComponent<Rigidbody>().AddForce(currentPanel.GetComponent<PanelBehaviour>().reflectV, ForceMode.Impulse);
+            Debug.Log("reflectV::" + currentPanel.GetComponent<PanelBehaviour>().reflectV);
+            var point = GameObject.Find("LineRenderer").GetComponent<LineRenderer>().GetPosition(GameObject.Find("LineRenderer").GetComponent<LineRenderer>().positionCount - 1);
+            DOTween.To(() => ball.transform.position, x => ball.transform.position = x, point, 1);
             // 进入下一次循环
             count++;
             isConfirm = false;

@@ -21,6 +21,7 @@ public class PanelManager : MonoBehaviour
 
     public float panelH;
 
+
     public virtual void Awake()
     {
         panelList = new List<GameObject>();
@@ -78,7 +79,7 @@ public class PanelManager : MonoBehaviour
               for (int i = 0; i < num; i++)
               {
                   var panel = handle.Result;
-                  Debug.Log(panel.name);
+                  //   Debug.Log(panel.name);
                   var go = Instantiate(panel);
                   go.SetActive(false);
                   panelList.Add(go);

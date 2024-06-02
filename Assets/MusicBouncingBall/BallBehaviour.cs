@@ -48,8 +48,11 @@ public class BallBehaviour : MonoBehaviour
 
     }
     Vector3 v = Vector3.zero;
+    public Vector3 rbV;
+
     void Update()
     {
+        rbV = rb.velocity;
         if (Input.GetKeyDown(KeyCode.K))
         {
             Debug.Log(rb.velocity);
