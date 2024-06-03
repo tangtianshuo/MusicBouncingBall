@@ -6,24 +6,26 @@ using Dweiss;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(LineRenderer), typeof(Rigidbody))]
-public class DrawLine : MonoBehaviour {
+public class DrawLine : MonoBehaviour
+{
     private LineRenderer _lr;
     private Rigidbody _rb;
 
     public float timeBeteenStep = 1;
     public int stepCount = 30;
-    
+
     public Vector3 addedV, addedF;
 
     public KeyCode keyToActivate = KeyCode.Space;
 
-    void Start() {
+    void Start()
+    {
         _lr = GetComponent<LineRenderer>();
         _rb = GetComponent<Rigidbody>();
         Debug.Log("Press " + keyToActivate + " to shooot ");
     }
 
-    private void AddPower()
+    public void AddPower()
     {
         Debug.LogWarning("Change V: " + addedV + " F: " + addedF);
         CalcTime();
@@ -60,11 +62,12 @@ public class DrawLine : MonoBehaviour {
         _lr.SetPosition(0, transform.position);
         for (int i = 0; i < res.Length; ++i)
         {
-            _lr.SetPosition(i+1, res[i]);
+            _lr.SetPosition(i + 1, res[i]);
         }
 
     }
-	void Update () {
+    void Update()
+    {
 
         DrawMovementLine();
 

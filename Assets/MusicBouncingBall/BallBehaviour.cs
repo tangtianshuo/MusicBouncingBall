@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -73,7 +74,7 @@ public class BallBehaviour : MonoBehaviour
     /// </summary>
     /// <param name="timeOffset"></param>
     /// <returns></returns>
-    public Vector2 GetBallPosition(float timeOffset)
+    public Vector3 GetBallPosition(float timeOffset)
     {
         Vector2 originPosition = new Vector2(transform.position.x, transform.position.y);
         Vector2 velocity = new Vector2(rb.velocity.x, rb.velocity.y);
@@ -93,6 +94,12 @@ public class BallBehaviour : MonoBehaviour
     {
         // ballisticPathLineRender.projectile.velocity = velocity;
     }
+
+    public void BallMove(float timeOffset)
+    {
+        DOTween.To(() => transform.position, x => x = transform.position, GetBallPosition(timeOffset), timeOffset);
+    }
+
 
     public void Stop()
     {

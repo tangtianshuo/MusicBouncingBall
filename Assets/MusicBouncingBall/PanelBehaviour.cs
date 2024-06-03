@@ -81,8 +81,9 @@ public class PanelBehaviour : MonoBehaviour
         // speed = V.magnitude;
         Debug.Log("BallV::" + V);
         reflectV = Vector3.Reflect(V, GetNomalizationVector3());
-        Debug.Log("ReflectV::" + V);
-        EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+        Debug.Log("ReflectV::" + reflectV);
+        // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+        ball.GetComponent<DrawLine>().addedV = reflectV;
 
     }
     /// <summary>

@@ -80,6 +80,8 @@ public class Director : MonoBehaviour
 
     public IEnumerator MainCircleDoTween()
     {
+        yield return new WaitUntil(() => PanelManager.Share.panelList.Count > 0);
+
         if (infoList == null)
         {
             throw new Exception("infoList is null");
@@ -89,11 +91,29 @@ public class Director : MonoBehaviour
         int count = 1;
         while (count < infos.Count)
         {
+
             var timeOffset = infos[count].timeOffset;
             var nextPosition = ballBehaviour.GetBallPosition(timeOffset);
             Debug.Log(nextPosition);
-            yield return null;
+            ballBehaviour.BallMove(timeOffset);
+            // 计算下一块板子的位置
+            var panelPosition = new Vector2(nextPosition.x, nextPosition.y);
+            var panelRotation = new Vector2(0, 90);
+            var v = ballBehaviour.V;
+            // var angle = Vector3.Angle(panel.transform.up, v.normalized);
+            // panelRotation = new Vector2(angle, 90);
+            if (count == 1)
+            {
+                panelRotation = new Vector2(20, 90);
+            }
+            var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
+
+            // EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
+
+            yield return new WaitUntil(() => isConfirm);
+            // 进入下一次循环
             count++;
+            isConfirm = false;
         }
 
     }
@@ -217,6 +237,7 @@ public class Director : MonoBehaviour
     public void Confirm()
     {
         Debug.Log("Confirm");
+        ball.GetComponent<DrawLine>().AddPower();
         isConfirm = true;
     }
 
