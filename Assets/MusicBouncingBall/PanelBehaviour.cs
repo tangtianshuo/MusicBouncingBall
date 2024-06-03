@@ -37,7 +37,6 @@ public class PanelBehaviour : MonoBehaviour
             //需要改变panel的法线
             if (rollDirection == "LEFT")
             {
-                // this.transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x + 1, transform.rotation.y, transform.rotation.z));
                 transform.Rotate(Vector3.left, Space.Self);
                 ballController.LineRendererController(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
 
@@ -45,15 +44,14 @@ public class PanelBehaviour : MonoBehaviour
             else if (rollDirection == "RIGHT")
             {
                 transform.Rotate(Vector3.right, Space.Self);
-                Debug.Log(bouncingBall.transform.position.normalized);
                 ballController.LineRendererController(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
-                Debug.Log(GetNomalizationVector3());
-                Debug.Log(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
 
             }
             reflectV = Vector3.Reflect(V, GetNomalizationVector3());
-            EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+            ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
+            // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
             Debug.Log(reflectV);
+
         }
 
     }
@@ -69,16 +67,14 @@ public class PanelBehaviour : MonoBehaviour
     }
     public Vector3 V;
     public Vector3 reflectV;
-
+    public BallBehaviour ballBehaviour;
     public void OnCollisionEnter(Collision other)
     {
         var ball = other.gameObject;
         var rb = ball.GetComponent<Rigidbody>();
-        V = ball.GetComponent<BallBehaviour>().V;
-        // rb.Sleep();
-        // var v = rb.velocity;
-
-        // speed = V.magnitude;
+        ballBehaviour = ball.GetComponent<BallBehaviour>();
+        ballBehaviour.Stop();
+        V = ballBehaviour.V;
         Debug.Log("BallV::" + V);
         reflectV = Vector3.Reflect(V, GetNomalizationVector3());
         Debug.Log("ReflectV::" + reflectV);
@@ -86,6 +82,16 @@ public class PanelBehaviour : MonoBehaviour
         ball.GetComponent<DrawLine>().addedV = reflectV;
 
     }
+    public void OnCollisionStay(Collision other)
+    {
+        var ball = other.gameObject;
+        var rb = ball.GetComponent<Rigidbody>();
+        ballBehaviour = ball.GetComponent<BallBehaviour>();
+        ball.GetComponent<DrawLine>().addedV = reflectV;
+
+
+    }
+
     /// <summary>
     /// 获取立方体物体碰撞体上表面的法线方向
     /// </summary>

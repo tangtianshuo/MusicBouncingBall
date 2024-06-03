@@ -45,7 +45,7 @@ public class PanelManager : MonoBehaviour
                     count++;
                 }
             }
-            if (count > 6)
+            if (panelList.Count - count < 3)
             {
                 LoadPanel(2);
             }
