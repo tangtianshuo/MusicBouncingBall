@@ -12,9 +12,6 @@ public class PanelManager : MonoBehaviour
 {
     public static PanelManager Share = null;
 
-
-    private PanelBehaviour panelBehaviour;
-
     public GameObject currentPanel;
 
     public List<GameObject> panelList;
@@ -29,6 +26,8 @@ public class PanelManager : MonoBehaviour
         // 构建资源池
         LoadPanel(10);
         panelH = 1f;
+        PlayerInputHandler.Share.CreatePanel += CreatePanel;
+        currentPanel = new();
     }
 
 
@@ -51,8 +50,21 @@ public class PanelManager : MonoBehaviour
             }
         }
     }
+
+    public void CreatePanel()
+    {
+        Vector2 currentPanelPosition = new Vector2(BallBehaviour.Share.transform.position.x, BallBehaviour.Share.transform.position.y - BallBehaviour.Share.ballR - 0.1f);
+        Vector2 currentPanelRotation = new Vector2(0, 90);
+        currentPanel = CreatePanel(currentPanelPosition, currentPanelRotation);
+    }
+
     public GameObject CreatePanel(Vector2 position, Vector2 rotation)
     {
+        foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
+        {
+            Debug.Log(item.name + "enable false");
+            item.GetComponent<PanelBehaviour>().DestoryController();
+        }
         var panel = PopPanel();
         panel.transform.SetPositionAndRotation(position, Quaternion.Euler(rotation));
         panel.SetActive(true);

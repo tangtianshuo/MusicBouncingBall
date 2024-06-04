@@ -125,7 +125,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4123960215748361297}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a571c627d0e5d4b41bcd4149be082669, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -153,8 +153,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bouncingBall: {fileID: 0}
   isActivate: 0
-  speed: 0
+  nextPosition: {x: 0, y: 0, z: 0}
+  nextRotation: {x: 0, y: 0, z: 0, w: 0}
+  height: 0
+  V: {x: 0, y: 0, z: 0}
   reflectV: {x: 0, y: 0, z: 0}
+  ballBehaviour: {fileID: 0}
 --- !u!1 &5306622358527277585
 GameObject:
   m_ObjectHideFlags: 0

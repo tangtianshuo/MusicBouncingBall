@@ -754,7 +754,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d9f0b39740127e442a96339b01ce4245, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -935,6 +935,12 @@ PrefabInstance:
       propertyPath: lineRenderer
       value: 
       objectReference: {fileID: 1275767102}
+    - target: {fileID: 5459445123450465395, guid: b1116497450b2694e9a2db1e8363b688,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: a571c627d0e5d4b41bcd4149be082669,
+        type: 2}
     - target: {fileID: 8866559693498826483, guid: b1116497450b2694e9a2db1e8363b688,
         type: 3}
       propertyPath: m_UseGravity

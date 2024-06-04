@@ -92,23 +92,38 @@ public class Director : MonoBehaviour
         while (count < infos.Count)
         {
 
-            var timeOffset = infos[count].timeOffset;
-            var nextPosition = ballBehaviour.GetBallPosition(timeOffset);
-            Debug.Log(nextPosition);
-            ballBehaviour.BallMove(timeOffset);
+            timeOffset = infos[count].timeOffset;
+            Vector3 heightestPoint = new();
+            Vector3 finalPoint = new();
+            Vector3 v = new();
+            // 获取到了小球的下一个位置
+            var nextPosition = ballBehaviour.GetNextPositionOrigin(ball.position, v, timeOffset, out heightestPoint, out finalPoint);
+
+            yield return new WaitForSeconds(timeOffset);
+            BallBehaviour.Share.incident = BallBehaviour.Share.V;
+            ballBehaviour.StopMove();
+
+            //创建 板子
+
+
+            // ball.transform.DOMove(nextPosition, timeOffset).SetEase(Ease.Linear);
+            // ballBehaviour.StopMove();
+
+            // Debug.Log(nextPosition);
+            // ballBehaviour.BallMove(timeOffset);
             // 计算下一块板子的位置
-            var panelPosition = new Vector2(nextPosition.x, nextPosition.y);
-            var panelRotation = new Vector2(0, 90);
-            var v = ballBehaviour.V;
-            var angle = Vector3.Angle(ballBehaviour.NextInReflect(), Vector3.up);
-            Debug.Log("ballBehaviour.NextInReflect():" + ballBehaviour.NextInReflect());
-            Debug.Log("angle:" + angle);
-            panelRotation = new Vector2(-angle, 90);
-            if (count == 1)
-            {
-                panelRotation = new Vector2(20, 90);
-            }
-            var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
+            // var panelPosition = new Vector2(nextPosition.x, nextPosition.y);
+            // var panelRotation = new Vector2(0, 90);
+            // var v = ballBehaviour.V;
+            // var angle = Vector3.Angle(ballBehaviour.NextInReflect(), Vector3.up);
+            // Debug.Log("ballBehaviour.NextInReflect():" + ballBehaviour.NextInReflect());
+            // Debug.Log("angle:" + angle);
+            // panelRotation = new Vector2(-angle, 90);
+            // if (count == 1)
+            // {
+            //     panelRotation = new Vector2(20, 90);
+            // }
+            // var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
 
             yield return new WaitUntil(() => isConfirm);
             // 进入下一次循环

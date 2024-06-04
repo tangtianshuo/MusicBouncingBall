@@ -3,6 +3,7 @@ using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using Dweiss;
+using Unity.Burst.Intrinsics;
 /*
  * 作者: 唐天硕
  * 创建: 2024-05-15 20:52
@@ -13,6 +14,12 @@ using Dweiss;
 
 public class BallBehaviour : MonoBehaviour
 {
+    public static BallBehaviour Share = null;
+    public virtual void Awake()
+    {
+        Share = this;
+
+    }
 
     public float speed = 2;
 
@@ -33,6 +40,8 @@ public class BallBehaviour : MonoBehaviour
     public bool stopSign;
 
     public Vector3 addV;
+    public Vector3 incident;
+
 
     void Start()
     {
@@ -52,22 +61,13 @@ public class BallBehaviour : MonoBehaviour
     Vector3 v = Vector3.zero;
     public Vector3 rbV;
 
+    public bool ballMove;
+
+    public Vector3 confirmPosition;
+
     void Update()
     {
-        rbV = rb.velocity;
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Debug.Log(rb.velocity);
-            v = rb.velocity;
-            rb.Sleep();
-        }
-        if (Input.GetKeyUp(KeyCode.K))
-        {
 
-            rb.WakeUp();
-            rb.velocity = v;
-
-        }
     }
 
     /// <summary>
@@ -83,6 +83,33 @@ public class BallBehaviour : MonoBehaviour
         var result = originPosition + velocity * timeOffset + new Vector2(gravityEffect.x, gravityEffect.y);
 
         return result;
+    }
+
+    // public Vector3 GetBallPosition(Vector3 ballPosition, Vector3 velocity, float timeOffset)
+    // {
+    //     // Vector2 originPosition = new Vector2(transform.position.x, transform.position.y);
+    //     // Vector2 velocity = new Vector2(rb.velocity.x, rb.velocity.y); 
+    //     // Vector2 gravityEffect = Physics.gravity * timeOffset * timeOffset * 0.5f;
+    //     var result = ballPosition + velocity * timeOffset + new Vector2(gravityEffect.x, gravityEffect.y);
+    // }
+
+    public Vector3 GetNextPositionOrigin(Vector3 originPosition, Vector3 initialVelocity, float time, out Vector3 highestPoint, out Vector3 finalPosition)
+    {
+        highestPoint = Vector3.zero;
+        finalPosition = Vector3.zero;
+
+        // 计算最高点
+        float timeToHighestPoint = -initialVelocity.y / Physics.gravity.y;
+        if (timeToHighestPoint > 0 && timeToHighestPoint < time)
+        {
+            highestPoint = originPosition + initialVelocity * timeToHighestPoint + 0.5f * Physics.gravity * timeToHighestPoint * timeToHighestPoint;
+        }
+
+        // 计算终点
+        finalPosition = originPosition + initialVelocity * time + 0.5f * Physics.gravity * time * time;
+
+        // 返回终点，此处可以根据需要返回最高点或其他信息
+        return finalPosition;
     }
 
     public Vector3 GetNextPosition(Vector3 initialVelocity, float time, out Vector3 highestPoint, out Vector3 finalPosition)
@@ -140,5 +167,7 @@ public class BallBehaviour : MonoBehaviour
         StartMove();
         rb.velocity = v;
     }
+
+
 
 }

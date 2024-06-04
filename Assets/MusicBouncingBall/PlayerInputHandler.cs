@@ -9,7 +9,12 @@ using UnityEngine.InputSystem.Interactions;
 
 public class PlayerInputHandler : MonoBehaviour
 {
+    public static PlayerInputHandler Share = null;
+    public virtual void Awake()
+    {
+        Share = this;
 
+    }
     public PlayerInput input;
 
     public GameObject jumpCube;
@@ -20,6 +25,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public Action confirm;
 
+    public Action CreatePanel;
 
 
     void OnEnable()
@@ -46,6 +52,9 @@ public class PlayerInputHandler : MonoBehaviour
                     break;
                 case "Confirm":
                     confirm.Invoke();
+                    break;
+                case "CreatePanel":
+                    CreatePanel.Invoke();
                     break;
 
             }

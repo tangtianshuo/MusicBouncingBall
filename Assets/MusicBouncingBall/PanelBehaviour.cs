@@ -48,12 +48,16 @@ public class PanelBehaviour : MonoBehaviour
                 ballController.LineRendererController(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
 
             }
-            reflectV = Vector3.Reflect(V, GetNomalizationVector3());
-            ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
-            // ballRb.velocity = reflectV;
-
-            // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
-            Debug.Log(reflectV);
+            // reflectV = Vector3.Reflect(V, GetNomalizationVector3());
+            // // ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
+            // // ballRb.velocity = reflectV;
+            // var v = BallBehaviour.Share.incident + transform.up;
+            // var final = new Vector3();
+            // var height = new Vector3();
+            // var pos = BallBehaviour.Share.GetNextPositionOrigin(originPosition, V, Director.Share.timeOffset, out height, out final);
+            // BallBehaviour.Share.transform.SetPositionAndRotation(final, Quaternion.Euler(new Vector3()));
+            // // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+            // Debug.Log(reflectV);
 
         }
 
@@ -71,14 +75,17 @@ public class PanelBehaviour : MonoBehaviour
     public Vector3 V;
     public Vector3 reflectV;
     public BallBehaviour ballBehaviour;
+
+    public Vector3 originPosition;
     public void OnCollisionEnter(Collision other)
     {
         var ball = other.gameObject;
         var rb = ball.GetComponent<Rigidbody>();
+        originPosition = ball.transform.position;
         ballRb = rb;
         ballBehaviour = ball.GetComponent<BallBehaviour>();
         ballBehaviour.StopMove();
-        V = ballBehaviour.V;
+        V = BallBehaviour.Share.incident;
         Debug.Log("BallV::" + V);
         reflectV = Vector3.Reflect(V, GetNomalizationVector3());
         Debug.Log("ReflectV::" + reflectV);
@@ -91,12 +98,19 @@ public class PanelBehaviour : MonoBehaviour
 
         Debug.Log("heightest: " + heightestPoint);
         Debug.Log("finnalPoint: " + finnalPoint);
-        var go = new GameObject();
-        go.name = "testPoint";
-        go.transform.position = finnalPoint;
-        Instantiate(go);
+        ballRb.velocity = V;
 
     }
+
+
+
+
+    // // 根据入射角 推算反射角 
+    // public Vector3 SimulateReflect()
+    // {
+
+    // }
+
     // public void OnCollisionStay(Collision other)
     // {
     //     var ball = other.gameObject;
