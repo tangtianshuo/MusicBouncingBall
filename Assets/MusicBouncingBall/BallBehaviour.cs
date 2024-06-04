@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using Dweiss;
 /*
  * 作者: 唐天硕
  * 创建: 2024-05-15 20:52
@@ -32,6 +32,7 @@ public class BallBehaviour : MonoBehaviour
     // Start is called before the first frame update
     public bool stopSign;
 
+    public Vector3 addV;
 
     void Start()
     {
@@ -46,7 +47,7 @@ public class BallBehaviour : MonoBehaviour
         nextPosition = transform.position + rb.velocity * Time.fixedDeltaTime;
         // 实时获取小球运动状态
         V = rb.velocity;
-
+        // rb.CalculateMovement()
     }
     Vector3 v = Vector3.zero;
     public Vector3 rbV;
@@ -79,15 +80,28 @@ public class BallBehaviour : MonoBehaviour
         Vector2 originPosition = new Vector2(transform.position.x, transform.position.y);
         Vector2 velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         Vector2 gravityEffect = Physics.gravity * timeOffset * timeOffset * 0.5f;
-        return originPosition + velocity * timeOffset + new Vector2(gravityEffect.x, gravityEffect.y);
+        var result = originPosition + velocity * timeOffset + new Vector2(gravityEffect.x, gravityEffect.y);
+
+        return result;
     }
 
-    public Vector3 GetNextPosition()
+    public Vector3 GetNextPosition(Vector3 initialVelocity, float time, out Vector3 highestPoint, out Vector3 finalPosition)
     {
-        // Vector3 ballDirection = nextPosition.normalized;
-        // nextPosition = ballDirection * (transform.GetComponent<Collider>().bounds.size.x / 2);
-        Debug.Log(nextPosition);
-        return nextPosition;
+        highestPoint = Vector3.zero;
+        finalPosition = Vector3.zero;
+
+        // 计算最高点
+        float timeToHighestPoint = -initialVelocity.y / Physics.gravity.y;
+        if (timeToHighestPoint > 0 && timeToHighestPoint < time)
+        {
+            highestPoint = transform.position + initialVelocity * timeToHighestPoint + 0.5f * Physics.gravity * timeToHighestPoint * timeToHighestPoint;
+        }
+
+        // 计算终点
+        finalPosition = transform.position + initialVelocity * time + 0.5f * Physics.gravity * time * time;
+
+        // 返回终点，此处可以根据需要返回最高点或其他信息
+        return finalPosition;
     }
 
     public void LineRendererController(Vector3 velocity)
@@ -97,17 +111,29 @@ public class BallBehaviour : MonoBehaviour
 
     public void BallMove(float timeOffset)
     {
-        DOTween.To(() => transform.position, x => x = transform.position, GetBallPosition(timeOffset), timeOffset);
+        DOTween.To(() => transform.position, x => x = transform.position, GetBallPosition(timeOffset) + Vector3.up * 2f, timeOffset);
+        // transform.DOMove(GetBallPosition(timeOffset), timeOffset);
+    }
+
+    public Vector3 NextInReflect()
+    {
+        var lineRender = GetComponent<LineRenderer>();
+
+        var count = lineRender.positionCount;
+        var v = lineRender.GetPosition(count - 2) - lineRender.GetPosition(count - 1);
+        return v;
     }
 
 
-    public void Stop()
+    public void StopMove()
     {
+        // rb.isKinematic = true;
         rb.Sleep();
     }
     public void StartMove()
     {
         rb.WakeUp();
+        // rb.isKinematic = false;
     }
     public void StartMove(Vector3 v)
     {

@@ -47,7 +47,7 @@ namespace Dweiss
             //return ret;
         }
 
-        public static Vector3[] CalculateMovement(Vector3 position, Vector3 velocity, Vector3 acc, 
+        public static Vector3[] CalculateMovement(Vector3 position, Vector3 velocity, Vector3 acc,
                int stepCount, float timeBeteenStep, Vector3 addedSpeed, Vector3 addedForce, float mass, float drag)
         {
             var ret = new Vector3[stepCount];
@@ -78,14 +78,14 @@ namespace Dweiss
                 v = (v + aDt) * dragDt;
                 x = x + v * dt + acc;
             }
-            return new Vector3[]{ x, v };
+            return new Vector3[] { x, v };
         }
 
 
         private static Vector3 CalculateVDrag(Vector3 v, Vector3 a, float drag, int deltaTimeCount)
         {
             var dt = Time.fixedDeltaTime;
-            for(int i=0; i < deltaTimeCount; ++i)
+            for (int i = 0; i < deltaTimeCount; ++i)
                 v = (v + a * dt) * (1 - drag * dt);
             return v;
         }
@@ -100,7 +100,7 @@ namespace Dweiss
         {
             return CalculateTime(that, targetPos, addedSpeed, Vector3.zero);
         }
-        public static Vector3[] CalculateTime(this Rigidbody that, Vector3 targetPos, 
+        public static Vector3[] CalculateTime(this Rigidbody that, Vector3 targetPos,
             Vector3 addedSpeed, Vector3 addedForce)
         {
 
@@ -138,7 +138,7 @@ namespace Dweiss
         }
         public static Vector3 PointMul(this Vector3 v1, Vector3 v2)
         {
-            return new Vector3(v1.x*v2.x, v1.y*v2.y, v1.z*v2.z);
+            return new Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
         }
 
         public static Vector3 PointDiv(this Vector3 v1, Vector3 v2)

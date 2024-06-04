@@ -100,15 +100,15 @@ public class Director : MonoBehaviour
             var panelPosition = new Vector2(nextPosition.x, nextPosition.y);
             var panelRotation = new Vector2(0, 90);
             var v = ballBehaviour.V;
-            // var angle = Vector3.Angle(panel.transform.up, v.normalized);
-            // panelRotation = new Vector2(angle, 90);
+            var angle = Vector3.Angle(ballBehaviour.NextInReflect(), Vector3.up);
+            Debug.Log("ballBehaviour.NextInReflect():" + ballBehaviour.NextInReflect());
+            Debug.Log("angle:" + angle);
+            panelRotation = new Vector2(-angle, 90);
             if (count == 1)
             {
                 panelRotation = new Vector2(20, 90);
             }
             var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
-
-            // EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
 
             yield return new WaitUntil(() => isConfirm);
             // 进入下一次循环
@@ -133,7 +133,7 @@ public class Director : MonoBehaviour
         int count = 1;
         while (count < infos.Count)
         {
-            ballBehaviour.Stop();
+            ballBehaviour.StopMove();
             yield return new WaitUntil(() => PanelManager.Share.panelList.Count > 0);
             ballBehaviour.StartMove();
             if (PanelManager.Share.panelList.Count < 0)

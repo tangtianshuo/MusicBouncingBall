@@ -928,7 +928,7 @@ PrefabInstance:
     - target: {fileID: 3688926554244132635, guid: b1116497450b2694e9a2db1e8363b688,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4260048768066173868, guid: b1116497450b2694e9a2db1e8363b688,
         type: 3}
@@ -939,6 +939,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_UseGravity
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8866559693498826483, guid: b1116497450b2694e9a2db1e8363b688,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

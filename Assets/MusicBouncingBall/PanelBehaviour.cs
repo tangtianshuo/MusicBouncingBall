@@ -19,6 +19,7 @@ public class PanelBehaviour : MonoBehaviour
 
     public float height;
 
+    private Rigidbody ballRb;
     void Start()
     {
         height = GetComponent<Collider>().bounds.size.y;
@@ -49,6 +50,8 @@ public class PanelBehaviour : MonoBehaviour
             }
             reflectV = Vector3.Reflect(V, GetNomalizationVector3());
             ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
+            // ballRb.velocity = reflectV;
+
             // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
             Debug.Log(reflectV);
 
@@ -72,25 +75,37 @@ public class PanelBehaviour : MonoBehaviour
     {
         var ball = other.gameObject;
         var rb = ball.GetComponent<Rigidbody>();
+        ballRb = rb;
         ballBehaviour = ball.GetComponent<BallBehaviour>();
-        ballBehaviour.Stop();
+        ballBehaviour.StopMove();
         V = ballBehaviour.V;
         Debug.Log("BallV::" + V);
         reflectV = Vector3.Reflect(V, GetNomalizationVector3());
         Debug.Log("ReflectV::" + reflectV);
         // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
         ball.GetComponent<DrawLine>().addedV = reflectV;
+        // rb.velocity = reflectV;
+        Vector3 heightestPoint = new();
+        Vector3 finnalPoint = new();
+        ballBehaviour.GetNextPosition(reflectV, Director.Share.timeOffset, out heightestPoint, out finnalPoint);
+
+        Debug.Log("heightest: " + heightestPoint);
+        Debug.Log("finnalPoint: " + finnalPoint);
+        var go = new GameObject();
+        go.name = "testPoint";
+        go.transform.position = finnalPoint;
+        Instantiate(go);
 
     }
-    public void OnCollisionStay(Collision other)
-    {
-        var ball = other.gameObject;
-        var rb = ball.GetComponent<Rigidbody>();
-        ballBehaviour = ball.GetComponent<BallBehaviour>();
-        ball.GetComponent<DrawLine>().addedV = reflectV;
+    // public void OnCollisionStay(Collision other)
+    // {
+    //     var ball = other.gameObject;
+    //     var rb = ball.GetComponent<Rigidbody>();
+    //     ballBehaviour = ball.GetComponent<BallBehaviour>();
+    //     ball.GetComponent<DrawLine>().addedV = reflectV;
 
 
-    }
+    // }
 
     /// <summary>
     /// 获取立方体物体碰撞体上表面的法线方向
