@@ -81,9 +81,24 @@ public class BallBehaviour : MonoBehaviour
         Vector2 velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         Vector2 gravityEffect = Physics.gravity * timeOffset * timeOffset * 0.5f;
         var result = originPosition + velocity * timeOffset + new Vector2(gravityEffect.x, gravityEffect.y);
-
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(result, 1f);
         return result;
     }
+
+    // 给予一个跳板法线方向的速度，结合重力计算小球位置。
+
+    public Vector3 GetBallPosition(Vector3 panelNomal)
+    {
+        return panelNomal * speed + Physics.gravity;
+    }
+    private void OnDrawGizmos()
+    {
+        var position = GetBallPosition(Vector3.up);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(position, 1f);
+    }
+
 
     // public Vector3 GetBallPosition(Vector3 ballPosition, Vector3 velocity, float timeOffset)
     // {
