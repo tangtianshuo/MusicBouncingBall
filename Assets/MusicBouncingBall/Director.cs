@@ -59,7 +59,7 @@ public class Director : MonoBehaviour
         grivate = Physics.gravity.y;
         isConfirm = false;
         speed = 5;
-
+        // ballBehaviour.StopMove();
         FileUtils fileUtils = new();
         string content = fileUtils.ReadFile("first");
         infoList = JsonUtility.FromJson<InfoList>(content);
@@ -102,6 +102,8 @@ public class Director : MonoBehaviour
             yield return new WaitForSeconds(timeOffset);
             BallBehaviour.Share.incident = BallBehaviour.Share.V;
             ballBehaviour.StopMove();
+
+
 
             //创建 板子
 

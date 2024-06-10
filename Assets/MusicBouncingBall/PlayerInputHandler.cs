@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using HeathenEngineering.UnityPhysics;
 using JetBrains.Annotations;
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
@@ -56,6 +57,19 @@ public class PlayerInputHandler : MonoBehaviour
                 case "CreatePanel":
                     CreatePanel.Invoke();
                     break;
+                case "Shot":
+                    BallBehaviour.Share.StartMove();
+                    BallBehaviour.Share.GetComponent<Rigidbody>().velocity = BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity;
+                    List<Vector3> positions = new List<Vector3>();
+                    // BallBehaviour.Share.lineRenderer.GetPositions(positions.ToArray());
+                    EventManager.Instance.RecordConfirmLine.Invoke(BallBehaviour.Share.GetComponent<BallisticPathLineRender>().trajectory);
+                    BallBehaviour.Share.lineRenderer.positionCount = 0;
+                    break;
+                case "AddForce":
+                    BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity += new Vector3(1, 0, 0);
+                    BallBehaviour.Share.GetComponent<BallisticPathLineRender>().Simulate();
+                    break;
+
 
             }
 

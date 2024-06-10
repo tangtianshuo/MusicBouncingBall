@@ -1,5 +1,7 @@
 ﻿#if HE_SYSCORE
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace HeathenEngineering.UnityPhysics
@@ -31,25 +33,31 @@ namespace HeathenEngineering.UnityPhysics
 
         private LineRenderer lineRenderer;
 
+        public (Vector3 position, Vector3 velocity, float time)[] steps;
+
+        public List<float> time;
+
         private void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
             lineRenderer.useWorldSpace = true;
-
+            time = new List<float>();
             if (runOnStart)
                 Simulate();
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
+
             if (continuousRun)
                 Simulate();
         }
-
+        public List<Vector3> trajectory = new();
+        float flightTime;
         public void Simulate()
         {
             resolution = Mathf.Max(resolution, 0.001f);
-            
+
             if (projectile.Speed > 0)
             {
                 Vector3 cGrav = Vector3.zero;
@@ -60,12 +68,17 @@ namespace HeathenEngineering.UnityPhysics
                     cGrav = Physics.gravity;
 
                 var impacts = new List<RaycastHit>();
-                var trajectory = new List<Vector3>();
+                trajectory = new List<Vector3>();
 
                 var result = projectile.Predict(start, null, resolution, maxLength, collisionLayers, cGrav);
-                foreach(var step in result.steps)
+                steps = result.steps;
+                flightTime = result.flightTime;
+                Debug.Log(flightTime);
+                foreach (var step in result.steps)
+                {
                     trajectory.Add(step.position);
-                
+                }
+
                 if (result.impact.HasValue)
                 {
                     impacts.Add(result.impact.Value);
@@ -101,7 +114,11 @@ namespace HeathenEngineering.UnityPhysics
                         }
                     }
                 }
-
+                time.Clear();
+                foreach (var step in result.steps)
+                {
+                    time.Add(step.time);
+                }
                 lineRenderer.positionCount = trajectory.Count;
                 lineRenderer.SetPositions(trajectory.ToArray());
             }

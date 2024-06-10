@@ -18,10 +18,11 @@ public class BallBehaviour : MonoBehaviour
     public virtual void Awake()
     {
         Share = this;
-
+        speed = 5f;
     }
+    public Vector3 force;
 
-    public float speed = 2;
+    public float speed = 5f;
 
     public float ballR;
 
@@ -169,13 +170,13 @@ public class BallBehaviour : MonoBehaviour
 
     public void StopMove()
     {
-        // rb.isKinematic = true;
+        rb.isKinematic = true;
         rb.Sleep();
     }
     public void StartMove()
     {
+        rb.isKinematic = false;
         rb.WakeUp();
-        // rb.isKinematic = false;
     }
     public void StartMove(Vector3 v)
     {

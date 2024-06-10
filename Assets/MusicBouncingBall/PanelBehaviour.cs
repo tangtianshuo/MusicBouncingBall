@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using HeathenEngineering.UnityPhysics;
 using UnityEngine;
 
 public class PanelBehaviour : MonoBehaviour
@@ -18,6 +19,7 @@ public class PanelBehaviour : MonoBehaviour
     public Action simulateLineAction;
 
     public float height;
+
 
     private Rigidbody ballRb;
     void Start()
@@ -40,14 +42,19 @@ public class PanelBehaviour : MonoBehaviour
             {
                 transform.Rotate(Vector3.left, Space.Self);
                 ballController.LineRendererController(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
-
+                // BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity = transform.up * BallBehaviour.Share.speed;
             }
             else if (rollDirection == "RIGHT")
             {
                 transform.Rotate(Vector3.right, Space.Self);
                 ballController.LineRendererController(Vector3.Reflect(bouncingBall.transform.position.normalized, GetNomalizationVector3()));
+                // BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity = transform.up * BallBehaviour.Share.speed;
 
             }
+            BallisticPathLineRender ballistic = BallBehaviour.Share.GetComponent<BallisticPathLineRender>();
+            ballistic.projectile.velocity = transform.up * BallBehaviour.Share.speed;
+            ballistic.start = BallBehaviour.Share.transform.position;
+            ballistic.Simulate();
             // reflectV = Vector3.Reflect(V, GetNomalizationVector3());
             // // ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
             // // ballRb.velocity = reflectV;
@@ -77,28 +84,34 @@ public class PanelBehaviour : MonoBehaviour
     public BallBehaviour ballBehaviour;
 
     public Vector3 originPosition;
+    // public void OnCollisionEnter(Collision other)
+    // {
+    //     BallBehaviour.Share.GetComponent<BallisticPathLineRender>().Simulate();
+    //     var ball = other.gameObject;
+    //     var rb = ball.GetComponent<Rigidbody>();
+    //     originPosition = ball.transform.position;
+    //     ballRb = rb;
+    //     ballBehaviour = ball.GetComponent<BallBehaviour>();
+    //     // ballBehaviour.StopMove();
+    //     V = BallBehaviour.Share.incident;
+    //     Debug.Log("BallV::" + V);
+    //     reflectV = Vector3.Reflect(V, GetNomalizationVector3());
+    //     Debug.Log("ReflectV::" + reflectV);
+    //     // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
+    //     ball.GetComponent<DrawLine>().addedV = reflectV;
+    //     // rb.velocity = reflectV;
+    //     Vector3 heightestPoint = new();
+    //     Vector3 finnalPoint = new();
+    //     ballBehaviour.GetNextPosition(reflectV, Director.Share.timeOffset, out heightestPoint, out finnalPoint);
+
+    //     Debug.Log("heightest: " + heightestPoint);
+    //     Debug.Log("finnalPoint: " + finnalPoint);
+    //     ballRb.velocity = V;
+
+    // }
     public void OnCollisionEnter(Collision other)
     {
-        var ball = other.gameObject;
-        var rb = ball.GetComponent<Rigidbody>();
-        originPosition = ball.transform.position;
-        ballRb = rb;
-        ballBehaviour = ball.GetComponent<BallBehaviour>();
-        ballBehaviour.StopMove();
-        V = BallBehaviour.Share.incident;
-        Debug.Log("BallV::" + V);
-        reflectV = Vector3.Reflect(V, GetNomalizationVector3());
-        Debug.Log("ReflectV::" + reflectV);
-        // EventManager.Instance.LineSimulateAction.Invoke(reflectV, Director.Share.timeOffset);
-        ball.GetComponent<DrawLine>().addedV = reflectV;
-        // rb.velocity = reflectV;
-        Vector3 heightestPoint = new();
-        Vector3 finnalPoint = new();
-        ballBehaviour.GetNextPosition(reflectV, Director.Share.timeOffset, out heightestPoint, out finnalPoint);
-
-        Debug.Log("heightest: " + heightestPoint);
-        Debug.Log("finnalPoint: " + finnalPoint);
-        ballRb.velocity = V;
+        BallBehaviour.Share.GetComponent<BallisticPathLineRender>().Simulate();
 
     }
 
