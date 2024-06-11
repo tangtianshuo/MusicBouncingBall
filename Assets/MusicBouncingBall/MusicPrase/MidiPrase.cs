@@ -6,34 +6,36 @@
  * 描述: Midi 音乐解析器，解析midi音乐，根据midi格式的音频，记录节奏点的时间。
  */
 
-
-using System.Collections;
+using MidiSharp;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using MidiSharp.Events;
 
-public class MidiPrase : MonoBehaviour
+using MidiSharp.Headers;
+public class MidiParser
 {
-    // Start is called before the first frame update
-    void Start()
+
+
+    public Dictionary<string, List<MidiEvent>> ParseMidi(string filePath)
     {
+        Dictionary<string, List<MidiEvent>> midiInfo = new();
+        List<MidiEvent> notes = new List<MidiEvent>();
 
-    }
+        // 读取MIDI文件
+        MidiSequence sequence = MidiSequence.Open(File.OpenRead(filePath));
 
-    // Update is called once per frame
-    void Update()
-    {
+        // 遍历每个轨道
+        foreach (MidiTrack track in sequence.Tracks)
+        {
+            // midiInfo.Add(track.)
+            foreach (MidiEvent midiEvent in track.Events)
+            {
+                notes.Add(midiEvent);
 
-    }
-    private List<float> rhythmPoints;
+            }
+        }
 
-    void Awake()
-    {
-        rhythmPoints = new List<float>();
-        ParseMidiFile("path_to_midi_file.mid");
-    }
-
-    void ParseMidiFile(string filePath)
-    {
-
+        return midiInfo;
     }
 }
