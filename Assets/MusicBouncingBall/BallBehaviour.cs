@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Dweiss;
 using Unity.Burst.Intrinsics;
+using HeathenEngineering.UnityPhysics;
 /*
  * 作者: 唐天硕
  * 创建: 2024-05-15 20:52
@@ -43,9 +44,12 @@ public class BallBehaviour : MonoBehaviour
     public Vector3 addV;
     public Vector3 incident;
 
+    public BallisticPathLineRender ballisticPathLineRender;
+
 
     void Start()
     {
+        ballisticPathLineRender = GetComponent<BallisticPathLineRender>();
         ballR = transform.GetComponent<SphereCollider>().bounds.size.y / 2;
         rb = GetComponent<Rigidbody>();
         // 使用其他方式
@@ -93,12 +97,12 @@ public class BallBehaviour : MonoBehaviour
     {
         return panelNomal * speed + Physics.gravity;
     }
-    private void OnDrawGizmos()
-    {
-        var position = GetBallPosition(Vector3.up);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(position, 1f);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     var position = GetBallPosition(Vector3.up);
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawSphere(position, 1f);
+    // }
 
 
     // public Vector3 GetBallPosition(Vector3 ballPosition, Vector3 velocity, float timeOffset)

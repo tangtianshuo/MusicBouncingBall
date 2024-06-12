@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using HeathenEngineering.UnityPhysics;
 using JetBrains.Annotations;
 using UnityEditor.Rendering.LookDev;
@@ -53,17 +54,25 @@ public class PlayerInputHandler : MonoBehaviour
                     break;
                 case "Confirm":
                     confirm.Invoke();
+                    BallBehaviour.Share.StartMove();
+                    Director.Share.Save();
                     break;
                 case "CreatePanel":
                     CreatePanel.Invoke();
                     break;
                 case "Shot":
+                    PanelManager.Share.CreatePanel(PanelManager.Share.simulatePanel.transform.position, PanelManager.Share.simulatePanel.transform.rotation);
                     BallBehaviour.Share.StartMove();
                     BallBehaviour.Share.GetComponent<Rigidbody>().velocity = BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity;
                     List<Vector3> positions = new List<Vector3>();
                     // BallBehaviour.Share.lineRenderer.GetPositions(positions.ToArray());
-                    EventManager.Instance.RecordConfirmLine.Invoke(BallBehaviour.Share.GetComponent<BallisticPathLineRender>().trajectory);
+                    EventManager.Instance.RecordConfirmLine.Invoke(BallBehaviour.Share.GetComponent<BallisticPathLineRender>().trajectory.Take(PanelManager.Share.impactIndex).ToList());
                     BallBehaviour.Share.lineRenderer.positionCount = 0;
+                    confirm.Invoke();
+                    // 此处需要记录跳板位置和小球收到的力
+                    var bouncingData = new BouncingData(Director.Share.timeOffset, BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity, PanelManager.Share.currentPanel.transform.position, PanelManager.Share.currentPanel.transform.rotation.eulerAngles);
+                    Debug.Log(bouncingData);
+                    Director.Share.SetSaveData(bouncingData);
                     break;
                 case "AddForce":
                     BallBehaviour.Share.GetComponent<BallisticPathLineRender>().projectile.velocity += new Vector3(1, 0, 0);

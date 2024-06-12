@@ -28,6 +28,13 @@ public class PanelManager : MonoBehaviour
         panelH = 1f;
         PlayerInputHandler.Share.CreatePanel += CreatePanel;
         currentPanel = new();
+        Addressables.LoadAssetAsync<GameObject>("SimulateJumpPanel").Completed += (handle) =>
+        {
+            simulatePanel = Instantiate(handle.Result);
+            simulatePanel.name += "_Simulate";
+            simulatePanel.SetActive(false);
+        };
+
     }
 
 
@@ -60,14 +67,40 @@ public class PanelManager : MonoBehaviour
 
     public GameObject CreatePanel(Vector2 position, Vector2 rotation)
     {
+
         foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
         {
             Debug.Log(item.name + "enable false");
             item.GetComponent<PanelBehaviour>().DestoryController();
         }
+
+
         var panel = PopPanel();
+
         panel.transform.SetPositionAndRotation(position, Quaternion.Euler(rotation));
         panel.SetActive(true);
+        currentPanel = panel;
+
+        return panel;
+
+    }
+
+    public GameObject CreatePanel(Vector2 position, Quaternion rotation)
+    {
+
+        foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
+        {
+            Debug.Log(item.name + "enable false");
+            item.GetComponent<PanelBehaviour>().DestoryController();
+        }
+
+
+        var panel = PopPanel();
+
+        panel.transform.SetPositionAndRotation(position, rotation);
+        panel.SetActive(true);
+
+
         return panel;
 
     }
@@ -97,6 +130,47 @@ public class PanelManager : MonoBehaviour
                   panelList.Add(go);
               }
           };
+    }
+
+    public GameObject simulatePanel;
+    public int impactIndex;
+
+    /// <summary>
+    /// 模拟跳板出现的位置
+    /// </summary>
+    public void SimulatePanelPosition()
+    {
+
+        impactIndex = Interrupt();
+        if (impactIndex == 0)
+        {
+            return;
+        }
+        simulatePanel.SetActive(true);
+        // CreatePanel(BallBehaviour.Share.ballisticPathLineRender.trajectory[i], new Vector2(0, 90));
+
+        simulatePanel.transform.SetPositionAndRotation(BallBehaviour.Share.ballisticPathLineRender.trajectory[impactIndex], Quaternion.Euler(new Vector3(0, 90, 0)));
+
+    }
+
+    /// <summary>
+    /// 根据音阶触发事件，来插入跳板
+    /// </summary>
+    public int Interrupt()
+    {
+        var timeOffset = Director.Share.timeOffset;
+        var timeList = BallBehaviour.Share.ballisticPathLineRender.time;
+        for (int i = 0; i < timeList.Count; i++)
+        {
+            if (timeOffset.ToShortString() == timeList[i].ToShortString())
+            {
+                Debug.Log("Interrupt Index " + i);
+
+                return i;
+
+            }
+        }
+        return 0;
     }
 
 

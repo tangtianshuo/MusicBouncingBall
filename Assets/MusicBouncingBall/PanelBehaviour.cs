@@ -55,6 +55,9 @@ public class PanelBehaviour : MonoBehaviour
             ballistic.projectile.velocity = transform.up * BallBehaviour.Share.speed;
             ballistic.start = BallBehaviour.Share.transform.position;
             ballistic.Simulate();
+
+            PanelManager.Share.SimulatePanelPosition();
+
             // reflectV = Vector3.Reflect(V, GetNomalizationVector3());
             // // ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
             // // ballRb.velocity = reflectV;
@@ -71,6 +74,7 @@ public class PanelBehaviour : MonoBehaviour
     }
     public void DestoryController()
     {
+        // if(inputHandler.rollAction.)
         inputHandler.rollAction -= Roll;
         isActivate = false;
     }

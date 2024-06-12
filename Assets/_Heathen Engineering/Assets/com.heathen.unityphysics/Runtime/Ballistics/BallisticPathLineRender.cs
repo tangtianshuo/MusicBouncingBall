@@ -73,7 +73,6 @@ namespace HeathenEngineering.UnityPhysics
                 var result = projectile.Predict(start, null, resolution, maxLength, collisionLayers, cGrav);
                 steps = result.steps;
                 flightTime = result.flightTime;
-                Debug.Log(flightTime);
                 foreach (var step in result.steps)
                 {
                     trajectory.Add(step.position);

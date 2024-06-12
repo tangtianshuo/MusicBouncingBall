@@ -396,10 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b624ddc959778734e8382f9d903fc07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 0}
-  confirmLineRenderer: {fileID: 640008718}
-  ball: {fileID: 0}
-  numPoints: 0
+  confirmLine: {fileID: 0}
 --- !u!1 &895847888
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,6 +570,7 @@ MonoBehaviour:
   currentPanel: {fileID: 0}
   panelList: []
   panelH: 0
+  simulatePanel: {fileID: 0}
 --- !u!1001 &1275767100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -998,7 +996,7 @@ MonoBehaviour:
   start: {x: 0, y: 0, z: 0}
   projectile:
     velocity: {x: 0, y: 0, z: 0}
-    radius: 0
+    radius: 0.5
   runOnStart: 1
   continuousRun: 0
   collisionLayers:
@@ -1011,6 +1009,7 @@ MonoBehaviour:
   gravityMode: 1
   customGravity: {x: 0, y: 0, z: 0}
   time: []
+  trajectory: []
 --- !u!20 &2045111544 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 3527138080337228540, guid: 97316daecc96147439f3b0026f71ccd3,

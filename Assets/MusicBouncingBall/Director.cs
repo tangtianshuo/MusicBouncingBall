@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -33,18 +34,33 @@ public class Director : MonoBehaviour
     public int speed;
     public InfoList infoList;
 
-    private float ballR;
-
-    private float panelH;
-
-    private float grivate;
 
     public Transform ball;
 
-    private GameObject panel;
 
     private BallBehaviour ballBehaviour;
-    private PanelBehaviour panelBehaviour;
+
+    private int _count;
+
+    public int GetCount()
+    {
+        return _count;
+    }
+
+
+
+    private MusicBouncingBallData saveData = new MusicBouncingBallData();
+
+
+    public void SetSaveData(BouncingData data)
+    {
+        saveData.data.Add(data);
+    }
+
+    public void Save()
+    {
+        File.WriteAllText("./SaveDataList.json", JsonUtility.ToJson(saveData));
+    }
 
     /// <summary>
     ///  小球半径和跳板的高度和
@@ -56,7 +72,6 @@ public class Director : MonoBehaviour
     {
         ballBehaviour = ball.GetComponent<BallBehaviour>();
         offset = ballBehaviour.ballR + PanelManager.Share.panelH;
-        grivate = Physics.gravity.y;
         isConfirm = false;
         speed = 5;
         // ballBehaviour.StopMove();
@@ -88,148 +103,41 @@ public class Director : MonoBehaviour
         }
 
         List<Info> infos = infoList.info;
-        int count = 1;
-        while (count < infos.Count)
+        _count = 0;
+        while (_count < infos.Count)
         {
-
-            timeOffset = infos[count].timeOffset;
-            Vector3 heightestPoint = new();
-            Vector3 finalPoint = new();
-            Vector3 v = new();
-            // 获取到了小球的下一个位置
-            var nextPosition = ballBehaviour.GetNextPositionOrigin(ball.position, v, timeOffset, out heightestPoint, out finalPoint);
-
-            yield return new WaitForSeconds(timeOffset);
-            BallBehaviour.Share.incident = BallBehaviour.Share.V;
-            ballBehaviour.StopMove();
+            if (_count == 0)
+                ballBehaviour.StopMove();
 
 
+            timeOffset = infos[_count].timeOffset;
 
-            //创建 板子
+            // BallBehaviour.Share.ballisticPathLineRender.Simulate();
+            // PanelManager.Share.SimulatePanelPosition();
+            if (_count == 1)
+            {
+                var height = Physics.gravity.y * timeOffset * timeOffset / 2 - BallBehaviour.Share.ballR - 0.2f; // panel的厚度
+                PanelManager.Share.CreatePanel(new Vector3(0, height), new Vector3(0, 90));
+            }
 
+            // BallBehaviour.Share.ballisticPathLineRender.Simulate();
+            // PanelManager.Share.SimulatePanelPosition();
 
-            // ball.transform.DOMove(nextPosition, timeOffset).SetEase(Ease.Linear);
+            // yield return new WaitForSeconds(timeOffset);
+            // // BallBehaviour.Share.ballisticPathLineRender.Simulate();
+            // BallBehaviour.Share.incident = BallBehaviour.Share.V;
             // ballBehaviour.StopMove();
 
-            // Debug.Log(nextPosition);
-            // ballBehaviour.BallMove(timeOffset);
-            // 计算下一块板子的位置
-            // var panelPosition = new Vector2(nextPosition.x, nextPosition.y);
-            // var panelRotation = new Vector2(0, 90);
-            // var v = ballBehaviour.V;
-            // var angle = Vector3.Angle(ballBehaviour.NextInReflect(), Vector3.up);
-            // Debug.Log("ballBehaviour.NextInReflect():" + ballBehaviour.NextInReflect());
-            // Debug.Log("angle:" + angle);
-            // panelRotation = new Vector2(-angle, 90);
-            // if (count == 1)
-            // {
-            //     panelRotation = new Vector2(20, 90);
-            // }
-            // var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
 
             yield return new WaitUntil(() => isConfirm);
             // 进入下一次循环
-            count++;
+            _count++;
             isConfirm = false;
         }
 
     }
 
 
-
-    #region  废案
-    public IEnumerator MainCircle()
-    {
-
-        if (infoList == null)
-        {
-            throw new Exception("infoList is null");
-        }
-
-        List<Info> infos = infoList.info;
-        int count = 1;
-        while (count < infos.Count)
-        {
-            ballBehaviour.StopMove();
-            yield return new WaitUntil(() => PanelManager.Share.panelList.Count > 0);
-            ballBehaviour.StartMove();
-            if (PanelManager.Share.panelList.Count < 0)
-            {
-                yield return null;
-            }
-            Info info = infos[count];
-            timeOffset = info.timeOffset;
-            var ballPosition = ballBehaviour.GetBallPosition(timeOffset);
-
-            // 计算下一块板子的位置
-            var panelPosition = new Vector2(ballPosition.x, ballPosition.y);
-            var panelRotation = new Vector2(0, 90);
-            var v = ballBehaviour.V;
-            // var angle = Vector3.Angle(panel.transform.up, v.normalized);
-            // panelRotation = new Vector2(angle, 90);
-            if (count == 1)
-            {
-                panelRotation = new Vector2(20, 90);
-            }
-            var currentPanel = PanelManager.Share.CreatePanel(panelPosition, panelRotation);
-
-            EventManager.Instance.LineSimulateAction.Invoke(new Vector3(), timeOffset);
-
-            // 在预测轨迹线的终点添加一个跳板
-
-            // foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
-            // {
-            //     Debug.Log(item.name + "enable false");
-            //     item.GetComponent<PanelBehaviour>().DestoryController();
-            // }
-
-            // float distance = timeOffset * speed;
-            // // Vector3 position = new Vector3(0, UnityEngine.Random.Range(0, 2), 0);
-            // Vector3 position = new Vector3(0, distance, 0);
-            // // 小球移动事件
-            // Vector3 offset = new Vector3(0, ballR + panelH, 0);
-
-
-            // Vector3 panelPosition = new(position.x, distance, position.z);
-            // // 生成跳板
-
-            // var currentPanel = Instantiate(panel, panelPosition, Quaternion.Euler(new Vector3(20, 90, 0)));
-
-            // // Vector3.Reflect();
-            // // 计算力的方向
-            // emitter.speed = speed;
-
-            // currentPanel.tag = "JumpPanel";
-            // // 这里进入一个协程，去控制下一次跳动。
-            // PanelController panelController = currentPanel.GetComponent<PanelController>();
-            // // 实时获取法线方向
-            // Vector3 panelNomal = new Vector3(0, 0, 0);
-            // // Vector3.Reflect(); 
-            // ball.GetComponent<Rigidbody>().AddForce(panelPosition, ForceMode.Impulse);
-
-
-            // Debug.Log("Director Run");
-            // API.Ballistics.Solution(ball, speed,);
-            // yield return StartCoroutine(panelController.ControlPanel());
-
-            // 等待确认事件
-
-            yield return new WaitUntil(() => isConfirm);
-
-
-            ball.GetComponent<Rigidbody>().velocity = currentPanel.GetComponent<PanelBehaviour>().reflectV * 2f;
-            // ball.GetComponent<Rigidbody>().AddForce(currentPanel.GetComponent<PanelBehaviour>().reflectV, ForceMode.Impulse);
-            Debug.Log("reflectV::" + currentPanel.GetComponent<PanelBehaviour>().reflectV);
-            var point = GameObject.Find("LineRenderer").GetComponent<LineRenderer>().GetPosition(GameObject.Find("LineRenderer").GetComponent<LineRenderer>().positionCount - 1);
-            DOTween.To(() => ball.transform.position, x => ball.transform.position = x, point, 1);
-            // 进入下一次循环
-            count++;
-            isConfirm = false;
-            yield return null;
-
-        }
-    }
-    #endregion
     public IEnumerator BallController(Vector3 position, float timeOffset)
     {
 
@@ -237,14 +145,6 @@ public class Director : MonoBehaviour
     }
     private Func<bool, bool> confirmAction;
     public bool isConfirm { get; private set; }
-    void Update()
-    {
-        // if (Input.GetKeyDown(KeyCode.Alpha1))
-        // {
-        //     isConfirm = true;
-        // }
-
-    }
     public bool Confrim(bool isConfirm)
     {
         bool confirmed = isConfirm;
@@ -254,7 +154,7 @@ public class Director : MonoBehaviour
     public void Confirm()
     {
         Debug.Log("Confirm");
-        ball.GetComponent<DrawLine>().AddPower();
+        // ball.GetComponent<DrawLine>().AddPower();
         isConfirm = true;
     }
 
