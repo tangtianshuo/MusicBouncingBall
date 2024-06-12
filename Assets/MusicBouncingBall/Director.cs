@@ -112,21 +112,21 @@ public class Director : MonoBehaviour
 
             timeOffset = infos[_count].timeOffset;
 
-            // BallBehaviour.Share.ballisticPathLineRender.Simulate();
-            // PanelManager.Share.SimulatePanelPosition();
             if (_count == 1)
             {
                 var height = Physics.gravity.y * timeOffset * timeOffset / 2 - BallBehaviour.Share.ballR - 0.2f; // panel的厚度
                 PanelManager.Share.CreatePanel(new Vector3(0, height), new Vector3(0, 90));
             }
 
-            // BallBehaviour.Share.ballisticPathLineRender.Simulate();
-            // PanelManager.Share.SimulatePanelPosition();
+            yield return new WaitForSeconds(timeOffset);
+            // BallBehaviour.Share.GetComponent<Rigidbody>().isKinematic = true;
 
-            // yield return new WaitForSeconds(timeOffset);
-            // // BallBehaviour.Share.ballisticPathLineRender.Simulate();
-            // BallBehaviour.Share.incident = BallBehaviour.Share.V;
-            // ballBehaviour.StopMove();
+            // var result = EMath.SimulateBallPosition(timeOffset, Vector2.Reflect(BallBehaviour.Share.V, transform.up), BallBehaviour.Share.transform.position, 50, out List<Vector2> pointList);
+
+
+            // BallBehaviour.Share.transform.position = result;
+
+
 
 
             yield return new WaitUntil(() => isConfirm);

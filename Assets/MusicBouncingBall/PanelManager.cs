@@ -60,9 +60,14 @@ public class PanelManager : MonoBehaviour
 
     public void CreatePanel()
     {
+
+        // 板子的法线方向，等于小球的运动方向
+
         Vector2 currentPanelPosition = new Vector2(BallBehaviour.Share.transform.position.x, BallBehaviour.Share.transform.position.y - BallBehaviour.Share.ballR - 0.1f);
         Vector2 currentPanelRotation = new Vector2(0, 90);
         currentPanel = CreatePanel(currentPanelPosition, currentPanelRotation);
+        var result = EMath.SimulateBallPosition(Director.Share.timeOffset, Vector2.zero, Vector2.zero, 50, out List<Vector2> pointList);
+        currentPanel.GetComponent<PanelBehaviour>();
     }
 
     public GameObject CreatePanel(Vector2 position, Vector2 rotation)
