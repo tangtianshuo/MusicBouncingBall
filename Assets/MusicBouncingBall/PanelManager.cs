@@ -8,6 +8,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+
+
 public class PanelManager : MonoBehaviour
 {
     public static PanelManager Share = null;
@@ -26,14 +28,14 @@ public class PanelManager : MonoBehaviour
         // 构建资源池
         LoadPanel(10);
         panelH = 1f;
-        PlayerInputHandler.Share.CreatePanel += CreatePanel;
+        // EventManager.Share.CreatePanelAction += CreatePanel;
         currentPanel = new();
-        Addressables.LoadAssetAsync<GameObject>("SimulateJumpPanel").Completed += (handle) =>
-        {
-            simulatePanel = Instantiate(handle.Result);
-            simulatePanel.name += "_Simulate";
-            simulatePanel.SetActive(false);
-        };
+        // Addressables.LoadAssetAsync<GameObject>("SimulateJumpPanel").Completed += (handle) =>
+        // {
+        //     simulatePanel = Instantiate(handle.Result);
+        //     simulatePanel.name += "_Simulate";
+        //     simulatePanel.SetActive(false);
+        // };
 
     }
 
@@ -62,12 +64,9 @@ public class PanelManager : MonoBehaviour
     {
 
         // 板子的法线方向，等于小球的运动方向
-
-        Vector2 currentPanelPosition = new Vector2(BallBehaviour.Share.transform.position.x, BallBehaviour.Share.transform.position.y - BallBehaviour.Share.ballR - 0.1f);
-        Vector2 currentPanelRotation = new Vector2(0, 90);
-        currentPanel = CreatePanel(currentPanelPosition, currentPanelRotation);
-        var result = EMath.SimulateBallPosition(Director.Share.timeOffset, Vector2.zero, Vector2.zero, 50, out List<Vector2> pointList);
-        currentPanel.GetComponent<PanelBehaviour>();
+        var position = Vector2.zero;
+        var rotation = Vector2.zero;
+        currentPanel = CreatePanel(position, rotation);
     }
 
     public GameObject CreatePanel(Vector2 position, Vector2 rotation)

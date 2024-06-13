@@ -39,10 +39,12 @@ namespace MusicBouncingBall
         void Start()
         {
             var position = BouncingUtiils.SimulateBallPosition(GetCurrentTimeOffset(), new Vector2(0, 0), Vector2.zero, 50, out List<Vector2> pointList);
+            lastPosition = position;
             var LineRenderer = GetComponent<LineRenderer>();
             LineRenderer.positionCount = 50;
             LineRenderer.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
-            // BallBehaviour.Share.SetPosition(position);
+            BallBehaviour.Share.SetPosition(position);
+            BallBehaviour.Share.GetComponent<Rigidbody>().AddForce(new Vector3(5, 0, 0), ForceMode.Impulse);
         }
 
         public List<float> GetTimeOffsetList()
@@ -68,6 +70,16 @@ namespace MusicBouncingBall
         public float GetGrivaty()
         {
             return _grivaty;
+        }
+
+        public Vector2 lastPosition;
+        public void OnDrawGizmos()
+        {
+            if (lastPosition != Vector2.zero)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(lastPosition, 0.1f);
+            }
         }
 
     }

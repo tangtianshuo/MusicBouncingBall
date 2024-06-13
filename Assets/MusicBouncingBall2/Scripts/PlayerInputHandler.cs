@@ -43,6 +43,11 @@ namespace MusicBouncingBall
             {
                 switch (value.action.name)
                 {
+                    case "CreatePanel":
+                        // createPanel
+                        EventManager.Share.CreatePanelAction.Invoke();
+                        break;
+
 
                     default:
                         break;
