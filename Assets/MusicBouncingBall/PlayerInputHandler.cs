@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using HeathenEngineering.UnityPhysics;
 using JetBrains.Annotations;
 using UnityEditor.Rendering.LookDev;
@@ -59,6 +60,10 @@ public class PlayerInputHandler : MonoBehaviour
                     break;
                 case "CreatePanel":
                     CreatePanel.Invoke();
+                    var RecV = Vector2.Reflect(BallBehaviour.Share.V, transform.up);
+                    var result = EMath.SimulateBallPosition(Director.Share.timeOffset, RecV, BallBehaviour.Share.transform.position, 50, out List<Vector2> pointList);
+                    BallBehaviour.Share.GetComponent<Rigidbody>().isKinematic = true;
+                    BallBehaviour.Share.transform.DOMove(result, 0.2f);
                     break;
                 case "Shot":
                     PanelManager.Share.CreatePanel(PanelManager.Share.simulatePanel.transform.position, PanelManager.Share.simulatePanel.transform.rotation);

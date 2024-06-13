@@ -128,15 +128,21 @@ public class Director : MonoBehaviour
 
 
 
-
             yield return new WaitUntil(() => isConfirm);
             // 进入下一次循环
             _count++;
             isConfirm = false;
+            Debug.Log(_count);
         }
 
     }
 
+    // public void OnDrawGizmos()
+    // {
+
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawSphere(Vector2.zero, 1);
+    // }
 
     public IEnumerator BallController(Vector3 position, float timeOffset)
     {

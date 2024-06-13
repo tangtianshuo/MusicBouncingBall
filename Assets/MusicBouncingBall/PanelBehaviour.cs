@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using HeathenEngineering.UnityPhysics;
 using UnityEngine;
 
@@ -57,6 +58,11 @@ public class PanelBehaviour : MonoBehaviour
             ballistic.Simulate();
 
             PanelManager.Share.SimulatePanelPosition();
+
+            var RecV = Vector2.Reflect(BallBehaviour.Share.V, transform.up);
+            var result = EMath.SimulateBallPosition(Director.Share.timeOffset, RecV, BallBehaviour.Share.transform.position, 50, out List<Vector2> pointList);
+            BallBehaviour.Share.GetComponent<Rigidbody>().isKinematic = true;
+            BallBehaviour.Share.transform.DOMove(result, 0.2f);
 
             // reflectV = Vector3.Reflect(V, GetNomalizationVector3());
             // // ballBehaviour.GetComponent<DrawLine>().addedV = reflectV;
@@ -115,7 +121,7 @@ public class PanelBehaviour : MonoBehaviour
     // }
     public void OnCollisionEnter(Collision other)
     {
-        BallBehaviour.Share.GetComponent<BallisticPathLineRender>().Simulate();
+        // BallBehaviour.Share.GetComponent<BallisticPathLineRender>().Simulate();
 
     }
 
