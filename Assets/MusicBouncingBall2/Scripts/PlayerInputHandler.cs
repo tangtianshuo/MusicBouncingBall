@@ -21,13 +21,6 @@ namespace MusicBouncingBall
         }
         public PlayerInput input;
 
-        public Action<string> rollAction;
-
-        public Action confirm;
-
-        public Action CreatePanel;
-
-
         void OnEnable()
         {
             input.onActionTriggered += KeyboardTrigger;
@@ -46,8 +39,18 @@ namespace MusicBouncingBall
                     case "CreatePanel":
                         // createPanel
                         EventManager.Share.CreatePanelAction.Invoke();
+                        EventManager.Share.SimulatePositionAction.Invoke(BallBehaviour.Share.GetLastPosition(), PanelManager.Share.currentPanel.transform.up);
                         break;
+                    case "LeftRoll":
+                        EventManager.Share.PanelRollAction.Invoke("LEFT");
+                        EventManager.Share.SimulatePositionAction.Invoke(BallBehaviour.Share.GetLastPosition(), PanelManager.Share.currentPanel.transform.up);
 
+                        break;
+                    case "RightRoll":
+                        EventManager.Share.PanelRollAction.Invoke("RIGHT");
+                        EventManager.Share.SimulatePositionAction.Invoke(BallBehaviour.Share.GetLastPosition(), PanelManager.Share.currentPanel.transform.up);
+
+                        break;
 
                     default:
                         break;

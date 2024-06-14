@@ -24,7 +24,7 @@ namespace MusicBouncingBall
         public float panelH;
 
 
-        public virtual void Awake()
+        public virtual void Start()
         {
             panelList = new List<GameObject>();
             Share = this;
@@ -33,7 +33,7 @@ namespace MusicBouncingBall
             panelH = 1f;
             EventManager.Share.CreatePanelAction += CreatePanel;
             currentPanel = new();
-
+            EventManager.Share.PanelRollAction += Roll;
 
         }
 
@@ -58,6 +58,20 @@ namespace MusicBouncingBall
             }
         }
 
+        public void Roll(string rollDirection)
+        {
+            if (rollDirection == "LEFT")
+            {
+                currentPanel.transform.Rotate(Vector3.left, Space.Self);
+
+            }
+            else if (rollDirection == "RIGHT")
+            {
+                currentPanel.transform.Rotate(Vector3.right, Space.Self);
+
+            }
+        }
+
         public void CreatePanel()
         {
 
@@ -73,7 +87,7 @@ namespace MusicBouncingBall
             foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
             {
                 Debug.Log(item.name + "enable false");
-                item.GetComponent<PanelBehaviour>().DestoryController();
+                // item.GetComponent<PanelBehaviour>().DestoryController();
             }
 
 
@@ -93,7 +107,7 @@ namespace MusicBouncingBall
             foreach (var item in GameObject.FindGameObjectsWithTag("JumpPanel"))
             {
                 Debug.Log(item.name + "enable false");
-                item.GetComponent<PanelBehaviour>().DestoryController();
+                // item.GetComponent<PanelBehaviour>().DestoryController();
             }
 
 

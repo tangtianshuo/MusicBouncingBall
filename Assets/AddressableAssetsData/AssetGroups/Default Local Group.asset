@@ -17,21 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 5eaac3ff4e8b9be4c878ef9cb7124040
   m_SerializeEntries:
-  - m_GUID: b1116497450b2694e9a2db1e8363b688
-    m_Address: BouncingBall
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3d09c3e0f7ddf4343a73782260f429af
-    m_Address: JumpPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4b9affaf0d9cf34fb4749f6ef33de29
-    m_Address: SimulateJumpPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 30562c8b2c7a8a04181fdfad5718a942
     m_Address: Panel
     m_ReadOnly: 0

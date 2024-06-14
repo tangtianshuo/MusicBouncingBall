@@ -15,6 +15,7 @@ namespace MusicBouncingBall
 
         private Director director = Director.Share;
 
+        private Vector2 _lastPosition;
         public Vector2 GetLastVector()
         {
             return lastV;
@@ -24,7 +25,7 @@ namespace MusicBouncingBall
         {
             Share = this;
 
-
+            EventManager.Share.SimulatePositionAction += BouncingForceSimulate;
         }
 
         void Start()
@@ -36,6 +37,7 @@ namespace MusicBouncingBall
 
         public void SetPosition(Vector2 simulatePosition)
         {
+            _lastPosition = _simulatePosition;
             _simulatePosition = simulatePosition;
         }
         public void Update()
@@ -51,6 +53,10 @@ namespace MusicBouncingBall
         }
 
 
+        public Vector2 GetLastPosition()
+        {
+            return _lastPosition;
+        }
         public void FixedUpdate()
         {
 
@@ -66,6 +72,20 @@ namespace MusicBouncingBall
             // 时间到后，暂停刚体
             GetComponent<Rigidbody>().isKinematic = true;
         }
+
+        public void BouncingForceSimulate(Vector2 ballPosition, Vector2 normal)
+        {
+            var bouncingForce = new Vector2();
+            bouncingForce = Vector2.Reflect(lastV, normal);
+            var result = BouncingUtiils.SimulateBallPosition(Director.Share.GetTimeOffsetList()[2], bouncingForce, ballPosition, 50, out List<Vector2> pointList);
+            _simulatePosition = result;
+            Debug.Log(result);
+            // SetPosition(result);
+            // return bouncingForce;
+        }
+
+
+
     }
 
 

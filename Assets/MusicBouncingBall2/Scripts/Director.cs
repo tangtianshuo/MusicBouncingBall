@@ -44,7 +44,7 @@ namespace MusicBouncingBall
             LineRenderer.positionCount = 50;
             LineRenderer.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
             BallBehaviour.Share.SetPosition(position);
-            BallBehaviour.Share.GetComponent<Rigidbody>().AddForce(new Vector3(5, 0, 0), ForceMode.Impulse);
+            // BallBehaviour.Share.GetComponent<Rigidbody>().AddForce(new Vector3(5, 0, 0), ForceMode.Impulse);
         }
 
         public List<float> GetTimeOffsetList()
