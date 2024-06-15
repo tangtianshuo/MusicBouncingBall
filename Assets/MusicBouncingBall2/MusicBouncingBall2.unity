@@ -365,6 +365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballSpeed: 5
   elastic: 0.8
+  count: 0
+  confirm: 0
   lastPosition: {x: 0, y: 0}
 --- !u!4 &1315182468
 Transform:
@@ -913,7 +915,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

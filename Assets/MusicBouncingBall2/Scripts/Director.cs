@@ -12,8 +12,9 @@ namespace MusicBouncingBall
         {
             _timeOffsetList = new List<float>();
             _timeOffsetList = GetTimeOffsetList();
-            _currentTimeOffset = _timeOffsetList[1];
+            _currentTimeOffset = _timeOffsetList[count];
             Share = this;
+            // EventManager.Share.ConfirmAction += Confirm;
         }
         #endregion
 
@@ -38,14 +39,30 @@ namespace MusicBouncingBall
 
         void Start()
         {
-            var position = BouncingUtiils.SimulateBallPosition(GetCurrentTimeOffset(), new Vector2(0, 0), Vector2.zero, 50, out List<Vector2> pointList);
-            lastPosition = position;
-            var LineRenderer = GetComponent<LineRenderer>();
-            LineRenderer.positionCount = 50;
-            LineRenderer.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
-            BallBehaviour.Share.SetPosition(position);
-            // BallBehaviour.Share.GetComponent<Rigidbody>().AddForce(new Vector3(5, 0, 0), ForceMode.Impulse);
+            EventManager.Share.ConfirmAction += Confirm;
+
         }
+        public int count;
+
+        void Update()
+        {
+            var _count = count;
+            // Debug.Log("Current Count" + count);
+            if (count > _count)
+            {
+                Debug.Log("count changed");
+                // _currentTimeOffset = _timeOffsetList[count];
+                // var position = BouncingUtiils.SimulateBallPosition(GetCurrentTimeOffset(), new Vector2(0, 0), Vector2.zero, 50, out List<Vector2> pointList);
+                // lastPosition = position;
+                // var LineRenderer = GetComponent<LineRenderer>();
+                // LineRenderer.positionCount = 50;
+                // LineRenderer.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
+                // BallBehaviour.Share.SetPosition(position);
+            }
+        }
+        public bool confirm = false;
+
+
 
         public List<float> GetTimeOffsetList()
         {
@@ -72,13 +89,27 @@ namespace MusicBouncingBall
             return _grivaty;
         }
 
-        public Vector2 lastPosition;
-        public void OnDrawGizmos()
+        // public Vector2 lastPosition;
+        // public void OnDrawGizmos()
+        // {
+        //     if (lastPosition != Vector2.zero)
+        //     {
+        //         Gizmos.color = Color.green;
+        //         Gizmos.DrawSphere(lastPosition, 0.1f);
+        //     }
+        // }
+        public void Confirm()
         {
-            if (lastPosition != Vector2.zero)
+            confirm = true;
+            Debug.Log("Confirm");
+            count++;
+            _currentTimeOffset = _timeOffsetList[count];
+
+            if (count == 1)
             {
-                Gizmos.color = Color.green;
-                Gizmos.DrawSphere(lastPosition, 0.1f);
+                StartCoroutine(BallBehaviour.Share.PauseAfterTime(GetCurrentTimeOffset()));
+                BallBehaviour.Share.RecordLastV();
+
             }
         }
 

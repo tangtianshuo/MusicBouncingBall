@@ -20,5 +20,7 @@ namespace MusicBouncingBall
         public Action<Vector2, Vector2> SimulatePositionAction;
 
         public Action<string> PanelRollAction;
+
+        public Action ConfirmAction;
     }
 }

@@ -36,9 +36,13 @@ namespace MusicBouncingBall
             {
                 switch (value.action.name)
                 {
+                    case "Confirm":
+                        EventManager.Share.ConfirmAction.Invoke();
+                        break;
                     case "CreatePanel":
                         // createPanel
                         EventManager.Share.CreatePanelAction.Invoke();
+                        Debug.Log("CurrentPanel Nomal::" + PanelManager.Share.currentPanel.transform.up);
                         EventManager.Share.SimulatePositionAction.Invoke(BallBehaviour.Share.GetLastPosition(), PanelManager.Share.currentPanel.transform.up);
                         break;
                     case "LeftRoll":

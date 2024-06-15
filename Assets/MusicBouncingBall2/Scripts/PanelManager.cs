@@ -76,7 +76,7 @@ namespace MusicBouncingBall
         {
 
             var lastV = BallBehaviour.Share.GetLastVector().normalized;
-            var position = new Vector2(BallBehaviour.Share.transform.position.x, BallBehaviour.Share.transform.position.y) + lastV * 0.6f; // 将位置设置为lastV的反方向
+            var position = new Vector2(BallBehaviour.Share.transform.position.x, BallBehaviour.Share.transform.position.y) - lastV * 0.6f; // 将位置设置为lastV的反方向
             var rotation = new Vector2(Vector2.Angle(lastV, new Vector2(0, 1)), 90);
             currentPanel = CreatePanel(position, rotation);
         }
