@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using HeathenEngineering.Events;
 using UnityEngine;
@@ -17,6 +18,9 @@ namespace MusicBouncingBall
         private Director director = Director.Share;
 
         private Vector2 _lastPosition;
+
+        public List<Vector2> ballPointList;
+
         public Vector2 GetLastVector()
         {
             return lastV;
@@ -81,6 +85,18 @@ namespace MusicBouncingBall
 
         }
 
+        public Vector2 GetLastSimulateV()
+
+        {
+            if (ballPointList.Count >= 2)
+            {
+                var first = ballPointList[^2];
+                var second = ballPointList[^1];
+                return second - first;
+            }
+            else return Vector2.up;
+
+        }
 
         public IEnumerator PauseAfterTime(float time)
         {
@@ -103,10 +119,14 @@ namespace MusicBouncingBall
             var bouncingForce = Vector2.Reflect(-lastV, normal) * 3f;
             var result = BouncingUtiils.SimulateBallPosition(Director.Share.GetCurrentTimeOffset(), bouncingForce, ballPosition, 50, out List<Vector2> pointList);
             _simulatePosition = result;
-            Debug.Log(lastV);
-            // SetPosition(result);
-            // return bouncingForce;
+            var line = GetComponent<LineRenderer>();
+            line.positionCount = pointList.Count;
+            line.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
+            ballPointList = pointList;
+            Debug.Log(GetLastSimulateV());
+
         }
+
 
 
 

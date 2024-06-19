@@ -40,6 +40,7 @@ namespace MusicBouncingBall
                         EventManager.Share.ConfirmAction.Invoke();
                         break;
                     case "CreatePanel":
+                        EventManager.Share.ConfirmAction.Invoke();
                         // createPanel
                         EventManager.Share.CreatePanelAction.Invoke();
                         Debug.Log("CurrentPanel Nomal::" + PanelManager.Share.currentPanel.transform.up);

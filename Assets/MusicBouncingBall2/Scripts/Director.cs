@@ -149,12 +149,15 @@ namespace MusicBouncingBall
 
             for (int i = 0; i < pointNumber; i++)
             {
+                // 更新速度
+                currentVelocity.y += gravity * deltaTime;
+
                 // 更新位置
                 currentPosition += currentVelocity * deltaTime;
                 // 将当前位置添加到轨迹列表
+
                 pointList.Add(currentPosition);
-                // 更新速度
-                currentVelocity.y += gravity * deltaTime;
+
             }
 
             return currentPosition; // 返回最终位置
