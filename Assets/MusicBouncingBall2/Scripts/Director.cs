@@ -50,7 +50,7 @@ namespace MusicBouncingBall
             // Debug.Log("Current Count" + count);
             if (count > _count)
             {
-                Debug.Log("count changed");
+                // Debug.Log("count changed");
                 // _currentTimeOffset = _timeOffsetList[count];
                 // var position = BouncingUtiils.SimulateBallPosition(GetCurrentTimeOffset(), new Vector2(0, 0), Vector2.zero, 50, out List<Vector2> pointList);
                 // lastPosition = position;
@@ -101,7 +101,7 @@ namespace MusicBouncingBall
         public void Confirm()
         {
             confirm = true;
-            Debug.Log("Confirm");
+            Debug.Log("Confirm count  ::" + count);
             count++;
             _currentTimeOffset = _timeOffsetList[count];
 

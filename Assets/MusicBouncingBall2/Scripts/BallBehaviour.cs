@@ -45,6 +45,8 @@ namespace MusicBouncingBall
             _lastPosition = simulatePosition;
             _simulatePosition = simulatePosition;
             recordLastV = true;
+
+            // Debug.Log(simulatePosition);
             // Director.Share.Confirm();
             // StartCoroutine(PauseAfterTime(Director.Share.GetCurrentTimeOffset()));
 
@@ -56,7 +58,7 @@ namespace MusicBouncingBall
             if (_simulatePosition != Vector2.zero)
             {
                 transform.DOMove(_simulatePosition, 0.02f).SetEase(Ease.Linear).Complete();
-                _simulatePosition = Vector2.zero;
+                // _simulatePosition = Vector2.zero;
 
 
             }
@@ -71,13 +73,13 @@ namespace MusicBouncingBall
         {
             lastV = -new Vector2(transform.position.x, transform.position.y) - lastV;
             recordLastV = false;
-            Debug.Log("LastV : " + lastV);
+            // Debug.Log("LastV : " + lastV);
         }
 
 
         public Vector2 GetLastPosition()
         {
-            Debug.Log("LastPosition" + _lastPosition);
+            // Debug.Log("LastPosition" + _lastPosition);
             return _lastPosition;
         }
         public void FixedUpdate()
@@ -98,10 +100,15 @@ namespace MusicBouncingBall
 
         }
 
+        public Vector2 GetSimulatePosition()
+        {
+            Debug.Log("simulatePosition:: " + _simulatePosition);
+            return _simulatePosition;
+        }
         public IEnumerator PauseAfterTime(float time)
         {
             pauseTime = false;
-            Debug.Log(time);
+            // Debug.Log(time);
             // 等待指定的时间
             GetComponent<Rigidbody>().isKinematic = false;
 
@@ -123,7 +130,7 @@ namespace MusicBouncingBall
             line.positionCount = pointList.Count;
             line.SetPositions(BouncingUtiils.Vector2List2Vector3List(pointList).ToArray());
             ballPointList = pointList;
-            Debug.Log(GetLastSimulateV());
+
 
         }
 
